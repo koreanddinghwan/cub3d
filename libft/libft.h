@@ -45,6 +45,13 @@ typedef struct s_tree
 	struct s_tree	*right;
 }	t_tree;
 
+typedef struct s_deqType
+{
+	int currentElementCount;
+	t_dlst* pFrontNode;
+	t_dlst* pRearNode;
+} t_deque;
+
 #define TRUE 1
 #define FALSE 0
 
@@ -137,4 +144,16 @@ void			ft_envlst_pushback(t_envlst **envlst, t_envlst *node);
 t_envlst		*ft_envlst_new(void *c);
 int				ft_envlst_size(t_envlst *envlst);
 char			*get_next_line(int fd);
+void ft_deq_delete(t_deque* pDeque);
+int ft_deq_insert_rear(t_deque* pDeque, void *c);
+int ft_deq_insert_front(t_deque* pDeque, void *c);
+int ft_deq_is_empty(t_deque* pDeque);
+t_deque* ft_deq_new(void);
+t_dlst* ft_deq_peek_front(t_deque* pDeque);
+t_dlst* ft_deq_peek_rear(t_deque* pDeque);
+t_dlst* ft_deq_pop_front(t_deque* pDeque);
+t_dlst* ft_deq_pop_rear(t_deque* pDeque);
+void	ft_deq_front_iter(t_deque *deq, void (*f)(void*));
+void	ft_deq_rear_iter(t_deque *deq, void (*f)(void*));
+
 #endif

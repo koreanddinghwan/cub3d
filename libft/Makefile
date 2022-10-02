@@ -27,7 +27,7 @@ SRCS = ft_isdigit.c ft_isalpha.c ft_isalnum.c ft_isascii.c ft_strlen.c \
 	   ft_dlst_clear.c ft_dlst_new.c ft_dlst_popback.c ft_dlst_popfront.c \
 	   ft_dlst_pushback.c ft_dlst_pushfront.c ft_dlst_size.c ft_dlst_delete.c\
 	   ft_btree_postordertrav.c ft_btree_inordertrav.c ft_btree_preordertrav.c ft_btree_get_right.c ft_btree_get_left.c ft_btree_make_left.c ft_btree_make_right.c ft_btree_new.c \
-	   ft_builtin.c get_next_line.c get_next_line_utils.c
+	   ft_deq_new.c ft_deq_delete.c ft_deq_pop.c ft_deq_insert.c ft_deq_is_empty.c ft_deq_new.c ft_deq_peek.c ft_deq_iter.c ft_builtin.c get_next_line.c get_next_line_utils.c
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall -Wextra -Werror -c 
 
