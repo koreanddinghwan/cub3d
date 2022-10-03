@@ -3,14 +3,14 @@
 /*
  *
 	
-	NO ./path_to_the_north_texture
-	
-	SO ./path_to_the_south_texture
-	WE ./path_to_the_west_texture
-	EA ./path_to_the_east_texture
-	F 220,100,0
+NO ./path_to_the_north_texture
 
-	C 225,30,0
+SO ./path_to_the_south_texture
+WE ./path_to_the_west_texture
+EA ./path_to_the_east_texture
+F 220,100,0
+
+C 225,30,0
 
 1111111111111111111111111
 1000000000110000000000001
@@ -33,7 +33,7 @@ int symbol_identifier(char *str, t_map *map)
 	char **split;
 	int  id;
 
-	split = ft_split(str, ' ');
+	split = ft_split_charset(str, "\n\t ");
 	if (!split)
 		error_exit();
 	if (ft_strcmp(split[0], "NO") == 0)
@@ -104,6 +104,7 @@ void get_img_pointer(t_map *map, int id, void *mlx_ptr)
 	int width;
 	int height;
 
+	extension_checker(map->buffer, ".xpm");
 	if (id == NO)
 		map->NO = mlx_xpm_file_to_image(mlx_ptr, map->buffer, &width, &height);
 	else if (id == SO)
@@ -146,17 +147,14 @@ void get_map_data(t_map *map, int fd, void *mlx_ptr)
 	t_dlst *node;
 
 	node = map->map_deq->pFrontNode;
-	/*
-	 * symbol update
-	 * */
-	while (node)
+	while (1)
 	{
 		id = symbol_identifier(node->content, map);
-		//map->buffer에 split된 다음 값 가진 상태
 		symbol_update(map, id, mlx_ptr);
 		if (id == MAP)
 			break ;
 		node = node->next;
 	}
 	symbol_missing(map);
+	make_map(map, node);
 }

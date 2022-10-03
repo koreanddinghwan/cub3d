@@ -1,12 +1,40 @@
 #include "../../inc/parser.h"
 
+void intprinter(int *t)
+{
+	for (int i = 0; i < 3; i++)
+		printf("%d ", t[i]);
+	printf("\n");
+}
+
+void mapPrinter(t_map *map)
+{
+	printf("F: ");
+	intprinter(map->F);
+	printf("C: ");
+	intprinter(map->C);
+	printf("\n");
+	printf("\n");
+
+	printf("map:\n");
+	for (int i = 0; i < map->map_height; i++)
+	{
+		for (int j = 0;  j < map->max_map_width; j++)
+			printf("%d", map->map[i][j]);
+		printf("\n");
+	}
+}
+
 int main(int ac, char **av)
 {
 	//t_game game?
 
-	if (ac != 1)
+	if (ac != 2)
 		return (1);
-
+	void *mlx = mlx_init();
+	t_map *map = parser(av[1], mlx);
+	mapPrinter(map);
+	return (0);
 }
 
 void init_map(t_map **map)
@@ -37,9 +65,11 @@ t_map *parser(char *path, void *mlx_ptr)
 	t_map *map;
 
 	init_map(&map);
-	extension_checker(path, "cub");
+	extension_checker(path, ".cub");
 	fd = check_open(path);
 	map_reader(map, fd);
-	//deque의 문자열 하나씩 popFront해나가며 t_map 채우기
+	printf("??");
+	get_map_data(map, fd, mlx_ptr);
+	ft_deq_delete(map->map_deq);
 	return (map);
 }

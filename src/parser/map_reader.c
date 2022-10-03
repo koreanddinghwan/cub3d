@@ -19,5 +19,4 @@ void map_reader(t_map *map, int fd)
 		}
 		ft_deq_insert_rear(map->map_deq, str);
 	}
-	//deque에 공백인 줄 없이 저장된다.
 }
