@@ -1,21 +1,10 @@
 #include "../../inc/parser.h"
 
-void update_wh(int *w, int *h, int len)
-{
-	if (*w < len)
-		*w = len;
-	(*h)++;
-}
-
 void map_reader(t_map *map, int fd)
 {
 	char *str;
-	int  w;
-	int  h;
 	int  len;
 
-	w = 0;
-	h = 0;
 	map->map_deq = ft_deq_new();
 	while (1)
 	{
@@ -28,7 +17,7 @@ void map_reader(t_map *map, int fd)
 			free(str);
 			continue;
 		}
-		update_wh(&w, &h, len);
 		ft_deq_insert_rear(map->map_deq, str);
 	}
+	//deque에 공백인 줄 없이 저장된다.
 }

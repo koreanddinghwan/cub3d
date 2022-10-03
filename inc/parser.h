@@ -7,11 +7,11 @@
 #include "global.h"
 #include "../libft/libft.h"
 #include "../libft/get_next_line.h"
+#include "../minilibx_opengl_20191021/mlx.h"
 
 typedef enum idnt
 {
-	EMPTY = 0,
-	NO,
+	NO = 0,
 	SO,
 	WE,
 	EA,
@@ -23,8 +23,10 @@ typedef enum idnt
 
 void extension_checker(char *path, char *ext);
 int check_open(char *path);
-void fill_map(t_map *map, int fd);
 void error_exit(void);
 void map_reader(t_map *map, int fd);
+void delete_splited(char **sp);
+t_map *parser(char *path, void *mlx_ptr);
+void get_map_data(t_map *map, int fd, void *mlx_ptr);
 
 #endif
