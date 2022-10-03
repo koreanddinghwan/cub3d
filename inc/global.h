@@ -12,6 +12,9 @@ typedef struct s_map
 	int F[3];
 	int C[3];
 	int **map;
+	t_deque *map_deq;
+	int max_map_width;
+	int map_height;
 } t_map;
 
 # define WIDTH 640

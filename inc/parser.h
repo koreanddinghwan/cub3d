@@ -24,5 +24,7 @@ typedef enum idnt
 void extension_checker(char *path, char *ext);
 int check_open(char *path);
 void fill_map(t_map *map, int fd);
+void error_exit(void);
+void map_reader(t_map *map, int fd);
 
 #endif

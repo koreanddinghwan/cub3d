@@ -60,23 +60,10 @@ void fill_map(t_map *map, int fd)
 
 	ft_memset(id, 0, 6);
 	id_index = 0;
-	while (1)
-	{
-		str = get_next_line(fd);
-		if (!str)
-			return ;
-		if (ft_strlen(str) == 0)
-		{
-			free(str);
-			continue;
-		}
-		//
 		symbol_identifier(str, map);
-		free(str);
 		/*
 		 * NO, SO 등의 심볼이 다 안채워짐 ==
 		 * id가 map인데, status가 6개 미만일때
 		 * */
 		//check_symbol_error
-	}
 }

@@ -17,6 +17,8 @@ int parser(char *path, t_map *map)
 	extension_checker(path, "cub");
 	//.cub file open checker
 	fd = check_open(path);
+	//map read and save in map deq;
+	map_reader(map, fd);
 	fill_map(map, fd);
 	return (TRUE);
 }
