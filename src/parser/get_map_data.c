@@ -28,30 +28,44 @@ C 225,30,0
 11111111 1111111 111111111111
  * */
 
+int split_len_check(char **sp)
+{
+	int i;
+
+	i = 0;
+	while (sp[i])
+		i++;
+	return (i);
+}
+
 int symbol_identifier(char *str, t_map *map)
 {
-	char **split;
 	int  id;
 
-	split = ft_split_charset(str, "\n\t ");
-	if (!split)
-		error_exit();
-	if (ft_strcmp(split[0], "NO") == 0)
+	while (*str == ' ')
+		str++;
+	if (ft_strncmp(str, "NO", 2) == 0)
 		id = NO;
-	else if (ft_strcmp(split[0], "SO") == 0)
+	else if (ft_strncmp(str, "SO", 2) == 0)
 		id = SO;
-	else if (ft_strcmp(split[0], "WE") == 0)
+	else if (ft_strncmp(str, "WE", 2) == 0)
 		id = WE;
-	else if (ft_strcmp(split[0], "EA") == 0)
+	else if (ft_strncmp(str, "EA", 2) == 0)
 		id = EA;
-	else if (ft_strcmp(split[0], "F") == 0)
+	else if (ft_strncmp(str, "F", 1) == 0)
 		id = F;
-	else if (ft_strcmp(split[0], "C") == 0)
+	else if (ft_strncmp(str, "C", 1) == 0)
 		id = C;
 	else
 		id = MAP;
-	map->buffer = ft_strdup(split[1]);
-	delete_splited(split);
+
+	if (id >= NO && id <= EA)
+		str += 2;
+	else if (id == F || id == C)
+		str += 1;
+	while (*str == ' ')
+		str++;
+	map->buffer = ft_strdup(str);
 	return (id);
 }
 
@@ -67,13 +81,13 @@ void charlen_check(char **sp)
 		while (sp[i][j])
 		{
 			if (ft_isalpha(sp[i][j]))
-				error_exit();
+				error_exit("alphabet is exists");
 			j++;
 		}
 		i++;
 	}
 	if (i != 3)
-		error_exit();
+		error_exit("not 3");
 }
 
 void get_rgb(t_map *map, int id)
@@ -89,7 +103,7 @@ void get_rgb(t_map *map, int id)
 	{
 		atoi = ft_atoi(sp[i]);
 		if (atoi < 0 || atoi > 255)
-			error_exit();
+			error_exit("atoi error\n");
 		if (id == F)
 			map->F[i] = atoi;
 		else
@@ -110,9 +124,9 @@ void get_img_pointer(t_map *map, int id, void *mlx_ptr)
 	else if (id == SO)
 		map->SO = mlx_xpm_file_to_image(mlx_ptr, map->buffer, &width, &height);
 	else if (id == WE)
-		map->SO = mlx_xpm_file_to_image(mlx_ptr, map->buffer, &width, &height);
+		map->WE = mlx_xpm_file_to_image(mlx_ptr, map->buffer, &width, &height);
 	else if (id == EA)
-		map->SO = mlx_xpm_file_to_image(mlx_ptr, map->buffer, &width, &height);
+		map->EA = mlx_xpm_file_to_image(mlx_ptr, map->buffer, &width, &height);
 	free(map->buffer);
 }
 
@@ -122,7 +136,7 @@ void symbol_update(t_map *map, int id, void *mlx_ptr)
 		return ;
 	map->symbols[id]++;
 	if (map->symbols[id] == 2)
-		error_exit();
+		error_exit("dup symbol\n");
 	if (id >= 0 && id <= 3)
 		get_img_pointer(map, id, mlx_ptr);
 	else
@@ -137,9 +151,17 @@ void symbol_missing(t_map *map)
 	while (i < 6)
 	{
 		if (map->symbols[i++] == 0)
-			error_exit();
+			error_exit("missing symbol\n");
 	}
 }
+
+
+/*
+ * split by ' '
+ * symbol은 길이2
+ * map은?
+ *
+ * */
 
 void get_map_data(t_map *map, int fd, void *mlx_ptr)
 {
@@ -149,12 +171,15 @@ void get_map_data(t_map *map, int fd, void *mlx_ptr)
 	node = map->map_deq->pFrontNode;
 	while (1)
 	{
+		printf("content : %s\n", (char *)node->content);
 		id = symbol_identifier(node->content, map);
+		printf("%d\n", id);
 		symbol_update(map, id, mlx_ptr);
 		if (id == MAP)
 			break ;
 		node = node->next;
 	}
 	symbol_missing(map);
+	printf("making map...\n");
 	make_map(map, node);
 }

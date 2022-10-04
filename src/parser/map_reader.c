@@ -1,5 +1,14 @@
 #include "../../inc/parser.h"
 
+char *trim_newline(char *str)
+{
+	char *rtn;
+
+	rtn = ft_strtrim(str, "\n");
+	free(str);
+	return (rtn);
+}
+
 void map_reader(t_map *map, int fd)
 {
 	char *str;
@@ -11,6 +20,7 @@ void map_reader(t_map *map, int fd)
 		str = get_next_line(fd);
 		if (!str)
 			return ;
+		str = trim_newline(str);
 		len = ft_strlen(str);
 		if (len == 0)
 		{

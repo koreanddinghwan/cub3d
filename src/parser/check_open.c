@@ -6,6 +6,6 @@ int check_open(char *path)
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		error_exit();
+		error_exit("open error");
 	return (fd);
 }

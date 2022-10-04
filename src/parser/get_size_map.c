@@ -29,12 +29,12 @@ void map_alloc(t_map *map)
 	i = 0;
 	map->map = ft_calloc(sizeof(int *), map->map_height);
 	if (!map->map)
-		error_exit();
+		error_exit("map alloc error");
 	while (i < map->map_height)
 	{
 		map->map[i] = ft_calloc(sizeof(int), map->max_map_width);
-		if (!map->map[i])
-			error_exit();
+		if (!(map->map[i]))
+			error_exit("map alloc error");
 		i++;
 	}
 }

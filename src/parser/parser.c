@@ -9,6 +9,10 @@ void intprinter(int *t)
 
 void mapPrinter(t_map *map)
 {
+	printf("NO : %p\n", map->NO);
+	printf("SO : %p\n", map->SO);
+	printf("EA : %p\n", map->EA);
+	printf("WE : %p\n", map->WE);
 	printf("F: ");
 	intprinter(map->F);
 	printf("C: ");
@@ -44,7 +48,7 @@ void init_map(t_map **map)
 	i = 0;
 	*map = malloc(sizeof(t_map));
 	if (!*map)
-		error_exit();
+		error_exit("map alloc error");
 	while (i < 3)
 		(*map)->F[i++] = -1;
 	i = 0;
@@ -68,7 +72,6 @@ t_map *parser(char *path, void *mlx_ptr)
 	extension_checker(path, ".cub");
 	fd = check_open(path);
 	map_reader(map, fd);
-	printf("??");
 	get_map_data(map, fd, mlx_ptr);
 	ft_deq_delete(map->map_deq);
 	return (map);
