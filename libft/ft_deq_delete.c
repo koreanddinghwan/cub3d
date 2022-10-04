@@ -1,4 +1,4 @@
-#include "ft_deque.h"
+#include "libft.h"
 
 void ft_deq_delete(t_deque* pDeque)
 {
@@ -6,10 +6,12 @@ void ft_deq_delete(t_deque* pDeque)
 
 	if (!pDeque)
 		exit(1);
-	while ((rtn = ft_deq_pop_front(pDeque)))
+	rtn = ft_deq_pop_front(pDeque);
+	while (rtn)
 	{
 		free(rtn->content);
 		free(rtn);
+		rtn = ft_deq_pop_front(pDeque);
 	}
 	free(pDeque);
 }

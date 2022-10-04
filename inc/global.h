@@ -5,13 +5,18 @@
 
 typedef struct s_map
 {
-	void *NO;
-	void *SO;
-	void *WE;
-	void *EA;
-	int F[3];
-	int C[3];
-	int **map;
+	void *NO; //
+	void *SO;//
+	void *WE;//
+	void *EA;//
+	int F[3]; //floor rgb
+	int C[3]; //ceiling rgb
+	int **map; //
+	int max_map_width;//
+	int map_height;//
+	int symbols[6];
+	char *buffer;
+	t_deque *map_deq;
 } t_map;
 
 # define WIDTH 640
