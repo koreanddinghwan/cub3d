@@ -27,8 +27,9 @@
  */
 # define WIN_WIDTH 640
 # define WIN_HEIGHT 480
-# define map_Width	5
-# define map_Height	5
+# define map_Width	7
+# define map_Height	7
+# define tex_size 64
 
 /**
  * @brief TOOL
@@ -39,12 +40,15 @@
 # define BAD_END 1
 
 int map[map_Width][map_Height] = {
-		{1, 1, 0, 1, 1},
-		{1, 0, 0, 0, 1},
-		{1, 0, 0, 0, 1},
-		{1, 0, 0, 0, 1},
-		{1, 1, 1, 1, 1}
-	};
+	{1, 1, 1, 1, 1, 1, 1},
+	{1, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 1},
+	{1, 1, 1, 1, 1, 1, 1},
+
+};
 
 typedef struct s_mlx
 {
@@ -98,8 +102,8 @@ typedef struct s_draw
 	int		texY;			//텍스쳐의 Y좌표
 	double	texPos;			//시작 텍스쳐 좌표
 	double	step;			//픽셀당 텍스쳐 좌표 증가크기
-	double	wallX;			//벽의 좌표
-	int		buf[480][640];
+	double	wallX;			//광선이 부딪힌 벽의 좌표
+	int		win_buf[WIN_HEIGHT][WIN_WIDTH]; //픽셀의 화면 버퍼
 }				t_draw;
 
 typedef struct s_game
@@ -122,14 +126,107 @@ int ft_strlen(char *str)
 
 void	game_init(t_game *game)
 {
-	game->vector.p_posX = 2.5;
-	game->vector.p_posY = 2.5;
-	game->vector.p_dirX = -1.0;
+	game->vector.p_posX = 3.5;
+	game->vector.p_posY = 3.5;
+	game->vector.p_dirX = -0.5;
 	game->vector.p_dirY = 0.0;
 	game->vector.planeX = 0.0;
 	game->vector.planeY = 0.66;
-	game->vector.p_Speed = 0.1;
+	game->vector.p_Speed = 0.5;
 	game->vector.rotSpeed = 0.1;
+}
+
+void	dda_algorithm(t_game *game, t_dda *dda)
+{
+	while (game->draw.hit == 0)
+	{
+		if (dda->sideDistX < dda->sideDistY)
+		{
+			dda->sideDistX += dda->deltaDistX;
+			dda->mapX += dda->stepX;
+			game->draw.side = 0;
+		}
+		else
+		{
+			dda->sideDistY += dda->deltaDistY;
+			dda->mapY += dda->stepY;
+			game->draw.side = 1;
+		}
+		if (map[dda->mapX][dda->mapY] > 0)
+			game->draw.hit = 1;
+	}
+}
+
+void	dda_init(t_game *game, t_dda *dda)
+{
+	dda->mapX = (int)(game->vector.p_posX);
+	dda->mapY = (int)(game->vector.p_posY);
+	dda->deltaDistX = fabs(1 / game->vector.rayDirectionX);
+	dda->deltaDistY = fabs(1 / game->vector.rayDirectionY);
+	game->draw.hit = 0;
+
+	if (game->vector.rayDirectionX < 0)
+	{
+		dda->stepX = -1;
+		dda->sideDistX = (game->vector.p_posX - dda->mapX) * dda->deltaDistX;
+	}
+	else
+	{
+		dda->stepX = 1;
+		dda->sideDistX = (dda->mapX + 1.0 - game->vector.p_posX) * dda->deltaDistX;
+	}
+	if (game->vector.rayDirectionY < 0)
+	{
+		dda->stepY = -1;
+		dda->sideDistY = (game->vector.p_posY - dda->mapY) * dda->deltaDistY;
+	}
+	else
+	{
+		dda->stepY = 1;
+		dda->sideDistY = (dda->mapY + 1.0 - game->vector.p_posY) * dda->deltaDistY;
+	}
+	dda_algorithm(game, dda);
+}
+
+void	cal_camera_dir(t_game *game, t_dda *dda, int x)
+{
+	if (game->draw.side == 0)	// 부딪힌 광선이 x면이면 x방향으로 몇칸지나갔는지 계산
+		dda->perpWallDist = (dda->mapX - game->vector.p_posX + (1 - dda->stepX) / 2) / game->vector.rayDirectionX;
+	else	// 부딪힌 광선이 y면
+		dda->perpWallDist = (dda->mapY - game->vector.p_posY + (1 - dda->stepY) / 2) / game->vector.rayDirectionY;
+	game->draw.draw_height = (int)(WIN_HEIGHT / dda->perpWallDist);
+	game->draw.start = (-game->draw.draw_height / 2) + (WIN_HEIGHT / 2);
+	if (game->draw.start < 0)
+		game->draw.start = 0;
+	game->draw.end = (game->draw.draw_height / 2) + (WIN_HEIGHT / 2);
+	if (game->draw.end >= WIN_HEIGHT)
+		game->draw.end = WIN_HEIGHT - 1;
+	if (game->draw.side == 0)
+		game->draw.wallX = game->vector.p_posY + dda->perpWallDist * game->vector.rayDirectionY;
+	else
+		game->draw.wallX = game->vector.p_posX + dda->perpWallDist * game->vector.rayDirectionX;
+	game->draw.wallX = game->draw.wallX - (int)game->draw.wallX;
+	game->draw.texX = (int)(game->draw.wallX * (double)tex_size);
+	if (game->draw.side == 0 && game->vector.rayDirectionX > 0)
+		game->draw.texX = tex_size - game->draw.texX - 1;
+	if (game->draw.side == 1 && game->vector.rayDirectionY < 0)
+		game->draw.texX = tex_size - game->draw.texX - 1;
+	game->draw.step = 1.0 * tex_size / game->draw.draw_height;
+	game->draw.texPos = (game->draw.start - WIN_HEIGHT / 2 + game->draw.draw_height / 2) * game->draw.step;
+        for (int y = 0; y < WIN_HEIGHT; y++)
+        {
+            game->draw.win_buf[y][x] = 0xFFFFFF; 
+            game->draw.win_buf[WIN_HEIGHT - y - 1][x] = 0x000000;
+        }
+	for (int y = game->draw.start; y < game->draw.end; y++)
+	{
+		game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
+		game->draw.texPos += game->draw.step;
+		int color = game->wall[tex_size * game->draw.texY + game->draw.texX];
+		if (game->draw.side == 1)
+			color = (color >> 8);  // & 8355711
+		game->draw.win_buf[y][x] = color; //픽셀의 화면 버퍼
+	}
 }
 
 int	game_loop(t_game *game)
@@ -140,110 +237,66 @@ int	game_loop(t_game *game)
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
-		game->vector.cameraX = (2 * x / (double)(WIN_WIDTH)) - 1; 
-		
+		game->vector.cameraX = (2 * x / (double)(WIN_WIDTH)) - 1;
 		game->vector.rayDirectionX = game->vector.p_dirX + game->vector.planeX * game->vector.cameraX;
 		game->vector.rayDirectionY = game->vector.p_dirY + game->vector.planeY * game->vector.cameraX;
-
-		int mapX = (int)(game->vector.p_posX);
-		int mapY = (int)(game->vector.p_posY);
-
-		dda.deltaDistX = fabs(1 / game->vector.rayDirectionX);
-		dda.deltaDistY = fabs(1 / game->vector.rayDirectionY);
-
-		game->draw.hit = 0;
-
-		if (game->vector.rayDirectionX < 0)
-		{
-			dda.stepX = -1;
-			dda.sideDistX = (game->vector.p_posX - mapX) * dda.deltaDistX;
-		}
-		else
-		{
-			dda.stepX = 1;
-			dda.sideDistX = (mapX + 1.0 - game->vector.p_posX) * dda.deltaDistX;
-		}
-		if (game->vector.rayDirectionY < 0)
-		{
-			dda.stepY = -1;
-			dda.sideDistY = (game->vector.p_posY - mapY) * dda.deltaDistY;
-		}
-		else
-		{
-			dda.stepY = 1;
-			dda.sideDistY = (mapY + 1.0 - game->vector.p_posY) * dda.deltaDistY;
-		}
-
-		while (game->draw.hit == 0)
-		{
-			if (dda.sideDistX < dda.sideDistY)
-			{
-				dda.sideDistX += dda.deltaDistX;
-				mapX += dda.stepX;
-				game->draw.side = 0;
-			}
-			else
-			{
-				dda.sideDistY += dda.deltaDistY;
-				mapY += dda.stepY;
-				game->draw.side = 1;
-			}
-			if (map[mapX][mapY] > 0)
-				game->draw.hit = 1;
-		}
-		if (game->draw.side == 0)
-			dda.perpWallDist = (mapX - game->vector.p_posX + (1 - dda.stepX) / 2) / game->vector.rayDirectionX;
-		else
-			dda.perpWallDist = (mapY - game->vector.p_posY + (1 - dda.stepY) / 2) / game->vector.rayDirectionY;
-		game->draw.draw_height = (int)(WIN_HEIGHT / dda.perpWallDist);
-		game->draw.start = (-game->draw.draw_height / 2) + (WIN_HEIGHT / 2);
-		if (game->draw.start < 0)
-			game->draw.start = 0;
-		game->draw.end = (game->draw.draw_height / 2) + (WIN_HEIGHT / 2);
-		if (game->draw.end >= WIN_HEIGHT)
-			game->draw.end = WIN_HEIGHT - 1;
-		if (game->draw.side == 0)
-			game->draw.wallX = game->vector.p_posY + dda.perpWallDist * game->vector.rayDirectionY;
-		else
-			game->draw.wallX = game->vector.p_posX + dda.perpWallDist * game->vector.rayDirectionX;
-		game->draw.wallX -= floor(game->draw.wallX);
-		game->draw.texX = (int)(game->draw.wallX * (double)64);
-		if (game->draw.side == 0 && game->vector.rayDirectionX > 0)
-			game->draw.texX = 64 - game->draw.texX - 1;
-		if (game->draw.side == 1 && game->vector.rayDirectionY < 0)
-			game->draw.texX = 64 - game->draw.texX - 1;
-		game->draw.step = 1.0 * 64 / game->draw.draw_height;
-		game->draw.texPos = (game->draw.start - WIN_HEIGHT / 2 + game->draw.draw_height / 2) * game->draw.step;
-		for (int y = game->draw.start; y < game->draw.end; y++)
-		{
-			game->draw.texY = (int)game->draw.texPos & (64 - 1);
-			game->draw.texPos += game->draw.step;
-			int color = game->wall[64 * game->draw.texY + game->draw.texX];
-			if (game->draw.side == 1)
-				color = (color >> 1) & 8355711;
-			game->draw.buf[y][x] = color;
-		}
+		dda_init(game, &dda);
+		cal_camera_dir(game, &dda, x);
 		x++;
 	}
 
-	 for (int y = 0; y < WIN_HEIGHT; y++)
-        for (int x = 0; x < WIN_WIDTH; x++)
-            game->mlx.addr[y * WIN_WIDTH + x] = game->draw.buf[y][x];
+	for (int y = 0; y < WIN_HEIGHT; y++)
+		for (int x = 0; x < WIN_WIDTH; x++)
+			game->mlx.addr[y * WIN_WIDTH + x] = game->draw.win_buf[y][x]; //픽셀의 화면 버퍼
 
 	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.img, 0, 0);
 	return 0;
 }
 
-// int input_key(int key, t_game *game)
-// {
-
-// }
+int input_key(int key, t_game *game)
+{
+	if (key == W)
+	{
+		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
+			game->vector.p_posX += game->vector.p_dirX * game->vector.p_Speed;
+		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
+			game->vector.p_posY += game->vector.p_dirY * game->vector.p_Speed;
+	}
+	if (key == S)
+	{
+		if (!map[(int)(game->vector.p_posX - game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
+			game->vector.p_posX -= game->vector.p_dirX * game->vector.p_Speed;
+		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY - game->vector.p_dirY * game->vector.p_Speed)])
+			game->vector.p_posY -= game->vector.p_dirY * game->vector.p_Speed;
+	}
+	if (key == A)
+	{
+		double	o_dirX = game->vector.p_dirX;
+		game->vector.p_dirX = game->vector.p_dirX * cos(game->vector.rotSpeed) - game->vector.p_dirY * sin(game->vector.rotSpeed);
+		game->vector.p_dirY = o_dirX * sin(game->vector.rotSpeed) + game->vector.p_dirY * cos(game->vector.rotSpeed);
+		double	o_planeX = game->vector.planeX;
+		game->vector.planeX = game->vector.planeX * cos(game->vector.rotSpeed) - game->vector.planeY * sin(game->vector.rotSpeed);
+		game->vector.planeY = o_planeX * sin(game->vector.rotSpeed) + game->vector.planeY * cos(game->vector.rotSpeed);
+	}
+	if (key == D)
+	{
+		double	o_dirX = game->vector.p_dirX;
+		game->vector.p_dirX = game->vector.p_dirX * cos(-game->vector.rotSpeed) - game->vector.p_dirY * sin(-game->vector.rotSpeed);
+		game->vector.p_dirY = o_dirX * sin(-game->vector.rotSpeed) + game->vector.p_dirY * cos(-game->vector.rotSpeed);
+		double	o_planeX = game->vector.planeX;
+		game->vector.planeX = game->vector.planeX * cos(-game->vector.rotSpeed) - game->vector.planeY * sin(-game->vector.rotSpeed);
+		game->vector.planeY = o_planeX * sin(-game->vector.rotSpeed) + game->vector.planeY * cos(-game->vector.rotSpeed);
+	}
+	if (key == ESC)
+		exit(0);
+	return (0);
+}
 
 void	show_wall(t_game *game)
 {
 	t_mlx	img;
 
-	img.img = mlx_xpm_file_to_image(game->mlx.ptr, "./images/wall_w.xpm", &img.w, &img.h);
+	img.img = mlx_xpm_file_to_image(game->mlx.ptr, "wall_w.xpm", &img.w, &img.h);
 	img.addr = (int *)mlx_get_data_addr(img.img, &img.pixel, &img.size, &img.endian);
 	int y = 0;
 	while (y < img.h)
@@ -268,14 +321,14 @@ int main()
 		write(1, ERROR, ft_strlen(ERROR));
 		return BAD_END;
 	}
-	if (!(game->wall = (int *)malloc(sizeof(int) * 64 * 64)))
+	if (!(game->wall = (int *)malloc(sizeof(int) * tex_size * tex_size)))
 	{
 		write(1, ERROR, ft_strlen(ERROR));
 		return BAD_END;
 	}
 
 	game_init(game);
-	
+
 	game->mlx.ptr = mlx_init();
 
 	show_wall(game);
@@ -284,7 +337,7 @@ int main()
 	game->mlx.img = mlx_new_image(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT);
 	game->mlx.addr = (int *)mlx_get_data_addr(game->mlx.img, &game->mlx.pixel, &game->mlx.size, &game->mlx.endian);
 	mlx_loop_hook(game->mlx.ptr , &game_loop, game);
-    // mlx_hook(game->mlx.win, 2, 0, &input_key, &game);
+	mlx_hook(game->mlx.win, 2, 0, &input_key, game);
 	mlx_loop(game->mlx.ptr);
 
 	free(game);
