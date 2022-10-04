@@ -14,6 +14,8 @@
 # define A 0
 # define S 1
 # define D 2
+# define LEFT 123
+# define RIGHT 124
 
 /**
  * @brief ESC
@@ -106,11 +108,22 @@ typedef struct s_draw
 	int		win_buf[WIN_HEIGHT][WIN_WIDTH]; //픽셀의 화면 버퍼
 }				t_draw;
 
+typedef struct s_key
+{
+	int		key_w;
+	int		key_s;
+	int		key_a;
+	int		key_d;
+	int		key_left;
+	int		key_right;
+}				t_key;
+
 typedef struct s_game
 {
 	t_mlx	mlx;
 	t_vector vector;
 	t_draw	draw;
+	t_key	key;
 	int		*wall;
 }				t_game;
 
@@ -132,8 +145,8 @@ void	game_init(t_game *game)
 	game->vector.p_dirY = 0.0;
 	game->vector.planeX = 0.0;
 	game->vector.planeY = 0.66;
-	game->vector.p_Speed = 0.5;
-	game->vector.rotSpeed = 0.3;
+	game->vector.p_Speed = 0.1;
+	game->vector.rotSpeed = 0.06;
 }
 
 void	dda_algorithm(t_game *game, t_dda *dda)
@@ -257,6 +270,7 @@ int input_key(int key, t_game *game)
 {
 	if (key == W)
 	{
+		game->key.key_w = 1;
 		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
 			game->vector.p_posX += game->vector.p_dirX * game->vector.p_Speed;
 		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
@@ -264,6 +278,7 @@ int input_key(int key, t_game *game)
 	}
 	if (key == S)
 	{
+		game->key.key_s = 1;
 		if (!map[(int)(game->vector.p_posX - game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
 			game->vector.p_posX -= game->vector.p_dirX * game->vector.p_Speed;
 		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY - game->vector.p_dirY * game->vector.p_Speed)])
@@ -271,6 +286,23 @@ int input_key(int key, t_game *game)
 	}
 	if (key == A)
 	{
+		game->key.key_a = 1;
+		if (!map[(int)(game->vector.p_posX - game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
+			game->vector.p_posX -= -game->vector.p_dirX * game->vector.p_Speed;
+		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
+			game->vector.p_posY += -game->vector.p_dirY * game->vector.p_Speed;
+	}
+	if (key == D)
+	{
+		game->key.key_d = 1;
+		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
+			game->vector.p_posX += -game->vector.p_dirX * game->vector.p_Speed;
+		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY - game->vector.p_dirY * game->vector.p_Speed)])
+			game->vector.p_posY -= -game->vector.p_dirY * game->vector.p_Speed;
+	}
+	if (key == LEFT)
+	{
+		game->key.key_left = 1;
 		double	o_dirX = game->vector.p_dirX;
 		game->vector.p_dirX = game->vector.p_dirX * cos(game->vector.rotSpeed) - game->vector.p_dirY * sin(game->vector.rotSpeed);
 		game->vector.p_dirY = o_dirX * sin(game->vector.rotSpeed) + game->vector.p_dirY * cos(game->vector.rotSpeed);
@@ -278,8 +310,9 @@ int input_key(int key, t_game *game)
 		game->vector.planeX = game->vector.planeX * cos(game->vector.rotSpeed) - game->vector.planeY * sin(game->vector.rotSpeed);
 		game->vector.planeY = o_planeX * sin(game->vector.rotSpeed) + game->vector.planeY * cos(game->vector.rotSpeed);
 	}
-	if (key == D)
+	if (key == RIGHT)
 	{
+		game->key.key_right = 1;
 		double	o_dirX = game->vector.p_dirX;
 		game->vector.p_dirX = game->vector.p_dirX * cos(-game->vector.rotSpeed) - game->vector.p_dirY * sin(-game->vector.rotSpeed);
 		game->vector.p_dirY = o_dirX * sin(-game->vector.rotSpeed) + game->vector.p_dirY * cos(-game->vector.rotSpeed);
@@ -289,6 +322,23 @@ int input_key(int key, t_game *game)
 	}
 	if (key == ESC)
 		exit(0);
+	return (0);
+}
+
+int	release_key(int key, t_game *game)
+{
+	if (key == W)
+		game->key.key_w = 0;
+	if (key == S)
+		game->key.key_s = 0;
+	if (key == A)
+		game->key.key_a = 0;
+	if (key == D)
+		game->key.key_d = 0;
+	if (key == LEFT)
+		game->key.key_left = 0;
+	if (key == RIGHT)
+		game->key.key_right = 0;
 	return (0);
 }
 
@@ -336,8 +386,9 @@ int main()
 	game->mlx.win = mlx_new_window(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT, "cub3D");
 	game->mlx.img = mlx_new_image(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT);
 	game->mlx.addr = (int *)mlx_get_data_addr(game->mlx.img, &game->mlx.pixel, &game->mlx.size, &game->mlx.endian);
+	mlx_hook(game->mlx.win, 2, 3, &input_key, game);
+	// mlx_hook(game->mlx.win, 3, 2, &release_key, game);
 	mlx_loop_hook(game->mlx.ptr , &game_loop, game);
-	mlx_hook(game->mlx.win, 2, 0, &input_key, game);
 	mlx_loop(game->mlx.ptr);
 
 	free(game);
