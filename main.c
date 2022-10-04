@@ -133,7 +133,7 @@ void	game_init(t_game *game)
 	game->vector.planeX = 0.0;
 	game->vector.planeY = 0.66;
 	game->vector.p_Speed = 0.5;
-	game->vector.rotSpeed = 0.1;
+	game->vector.rotSpeed = 0.3;
 }
 
 void	dda_algorithm(t_game *game, t_dda *dda)
@@ -296,7 +296,7 @@ void	show_wall(t_game *game)
 {
 	t_mlx	img;
 
-	img.img = mlx_xpm_file_to_image(game->mlx.ptr, "./images/wall_w.xpm", &img.w, &img.h);
+	img.img = mlx_xpm_file_to_image(game->mlx.ptr, "wall_w.xpm", &img.w, &img.h);
 	img.addr = (int *)mlx_get_data_addr(img.img, &img.pixel, &img.size, &img.endian);
 	int y = 0;
 	while (y < img.h)
