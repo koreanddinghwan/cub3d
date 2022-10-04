@@ -23,10 +23,11 @@ typedef enum idnt
 
 void extension_checker(char *path, char *ext);
 int check_open(char *path);
-void error_exit(void);
+void error_exit(char *str);
 void map_reader(t_map *map, int fd);
 void delete_splited(char **sp);
 t_map *parser(char *path, void *mlx_ptr);
 void get_map_data(t_map *map, int fd, void *mlx_ptr);
+void make_map(t_map *map, t_dlst *start);
 
 #endif
