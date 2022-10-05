@@ -27,8 +27,8 @@
  * @brief RESOLUTION, MAP_SIZE
  * 
  */
-# define WIN_WIDTH 640
-# define WIN_HEIGHT 480
+# define WIN_WIDTH 1280//640 1280
+# define WIN_HEIGHT 720//480 720
 # define map_Width	7
 # define map_Height	7
 # define tex_size 64
@@ -125,6 +125,11 @@ typedef struct s_minimap
 {
 	int		*mini_addr;
 	void	*mini_img;
+	int		pixel;
+	int		size;
+	int		endian;
+	int		ratio_w;
+	int		ratio_h;
 }				t_minimap;
 
 typedef struct s_bonus
@@ -245,8 +250,8 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 	game->draw.texPos = (game->draw.start - WIN_HEIGHT / 2 + game->draw.draw_height / 2) * game->draw.step;
         for (int y = 0; y < WIN_HEIGHT; y++)
         {
-            game->draw.win_buf[y][x] = 0xFFFFFF; 
-            game->draw.win_buf[WIN_HEIGHT - y - 1][x] = 0x000000;
+            game->draw.win_buf[y][x] = 0x000000; 
+            game->draw.win_buf[WIN_HEIGHT - y - 1][x] = 0xFFFFFF;
         }
 	for (int y = game->draw.start; y < game->draw.end; y++)
 	{
@@ -259,19 +264,45 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 	}
 }
 
+void	paint(t_game *game, int y, int x, char *color)
+{
+	int	i;
+	int	j;
+
+	i = y - 1;
+	while (++i < y + game->mini.ratio_h)
+	{
+		j = x - 1;
+		while (++j < x + game->mini.ratio_w)
+		{
+			game->mini.mini_addr[i * mini_w + j] = atoi(color);
+		}
+	}
+}
+
 void	print_minimap(t_game *game)
 {
 	game->mini.mini_img = mlx_new_image(game->mlx.ptr, mini_w, mini_h);
+	game->mini.mini_addr = (int *)mlx_get_data_addr(game->mini.mini_img, &game->mini.pixel, &game->mini.size, &game->mini.endian);
 	int x;
 	int y;
 
 	y = 0;
-	while (y < mini_h)
+	while (x < mini_w)
 	{
 		x = 0;
-		while (x < mini_w)
+		while (x < mini_h)
 		{
-			game->mini.mini_addr[y * mini_w + x] = 0x000FF;
+			if (x == (int)game->vector.p_posX && y == (int)game->vector.p_posY)
+				paint(game, x * game->mini.ratio_h, y * game->mini.ratio_w, "#FF0000");
+			else if (map[(int)(y)][(int)(x)] == '\0')
+				break;
+			else if (map[(int)(y)][(int)(x)] == '0')
+				paint(game, x * game->mini.ratio_h, y * game->mini.ratio_w, "#FFFFFF");
+			else if (map[(int)(y)][(int)(x)] == '1')
+				paint(game, x * game->mini.ratio_h, y * game->mini.ratio_w, "#FFFAFA");
+			else
+				paint(game, x * game->mini.ratio_h, y * game->mini.ratio_w, "#FFFAFA");
 			x++;
 		}
 		y++;
