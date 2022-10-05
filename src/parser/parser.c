@@ -17,14 +17,16 @@ void mapPrinter(t_map *map)
 	intprinter(map->F);
 	printf("C: ");
 	intprinter(map->C);
-	printf("\n");
-	printf("\n");
-
 	printf("map:\n");
 	for (int i = 0; i < map->map_height; i++)
 	{
 		for (int j = 0;  j < map->max_map_width; j++)
-			printf("%d", map->map[i][j]);
+		{
+			if (map->map[i][j] == 2)
+				printf(" ");
+			else
+				printf("%d", map->map[i][j]);
+		}
 		printf("\n");
 	}
 }
@@ -65,14 +67,14 @@ void init_map(t_map **map)
 
 t_map *parser(char *path, void *mlx_ptr)
 {
-	int fd;
 	t_map *map;
 
 	init_map(&map);
-	extension_checker(path, ".cub");
-	fd = check_open(path);
-	map_reader(map, fd);
-	get_map_data(map, fd, mlx_ptr);
+	map_reader(map, map_open(path));
+	map_make(map, mlx_ptr);
+	map_validation(map);
 	ft_deq_delete(map->map_deq);
+	while (1);
+	printf("map check OK\n");
 	return (map);
 }
