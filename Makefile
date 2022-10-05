@@ -38,6 +38,7 @@ clean:
 fclean: clean
 	$(RM) $(NAME)
 	$(RM) *.dSYM
+	$(RM) *.a
 	
 
 re: fclean all
