@@ -33,6 +33,9 @@
 # define map_Height	7
 # define tex_size 64
 
+# define mini_w	64
+# define mini_h 48
+
 /**
  * @brief TOOL
  * 
@@ -118,12 +121,24 @@ typedef struct s_key
 	int		key_right;
 }				t_key;
 
+typedef struct s_minimap
+{
+	int		*mini_addr;
+	void	*mini_img;
+}				t_minimap;
+
+typedef struct s_bonus
+{
+
+}				t_bonus;
+
 typedef struct s_game
 {
 	t_mlx	mlx;
 	t_vector vector;
 	t_draw	draw;
 	t_key	key;
+	t_minimap mini;
 	int		*wall;
 }				t_game;
 
@@ -145,8 +160,8 @@ void	game_init(t_game *game)
 	game->vector.p_dirY = 0.0;
 	game->vector.planeX = 0.0;
 	game->vector.planeY = 0.66;
-	game->vector.p_Speed = 0.1;
-	game->vector.rotSpeed = 0.06;
+	game->vector.p_Speed = 0.3;
+	game->vector.rotSpeed = 0.1;
 }
 
 void	dda_algorithm(t_game *game, t_dda *dda)
@@ -242,6 +257,26 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 	}
 }
 
+void	print_minimap(t_game *game)
+{
+	game->mini.mini_img = mlx_new_image(game->mlx.ptr, mini_w, mini_h);
+	int x;
+	int y;
+
+	y = 0;
+	while (y < mini_h)
+	{
+		x = 0;
+		while (x < mini_w)
+		{
+			game->mini.mini_addr[y * mini_w + x] = 0x000FF;
+			x++;
+		}
+		y++;
+	}
+	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mini.mini_img, 0, 0);
+}
+
 int	game_loop(t_game *game)
 {
 	t_dda dda;
@@ -257,13 +292,23 @@ int	game_loop(t_game *game)
 		cal_camera_dir(game, &dda, x);
 		x++;
 	}
-
 	for (int y = 0; y < WIN_HEIGHT; y++)
 		for (int x = 0; x < WIN_WIDTH; x++)
 			game->mlx.addr[y * WIN_WIDTH + x] = game->draw.win_buf[y][x]; //픽셀의 화면 버퍼
-
 	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.img, 0, 0);
+	// print_minimap(game);
 	return 0;
+}
+
+void	rotate(t_game *game, double speed)
+{
+	double	o_dirX = game->vector.p_dirX;
+	double	o_planeX = game->vector.planeX;
+
+	game->vector.p_dirX = game->vector.p_dirX * cos(speed) - game->vector.p_dirY * sin(speed);
+	game->vector.p_dirY = o_dirX * sin(speed) + game->vector.p_dirY * cos(speed);
+	game->vector.planeX = game->vector.planeX * cos(speed) - game->vector.planeY * sin(speed);
+	game->vector.planeY = o_planeX * sin(speed) + game->vector.planeY * cos(speed);
 }
 
 int input_key(int key, t_game *game)
@@ -287,42 +332,38 @@ int input_key(int key, t_game *game)
 	if (key == A)
 	{
 		game->key.key_a = 1;
-		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
-			game->vector.p_posX += game->vector.p_dirX * cos(game->vector.p_Speed) - game->vector.p_dirY * sin(game->vector.p_Speed);
-		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
-			game->vector.p_posY += game->vector.p_dirY * sin(game->vector.p_Speed) + game->vector.p_dirY * cos(game->vector.p_Speed);
-	
+		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(M_PI_2) - game->vector.p_dirY * sin(M_PI_2))][(int)(game->vector.p_posY)])
+			game->vector.p_posX += game->vector.p_dirX * cos(M_PI_2) - game->vector.p_dirY * sin(M_PI_2);
+		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(M_PI_2) + game->vector.p_dirY * cos(M_PI_2))])
+			game->vector.p_posY += game->vector.p_dirX * sin(M_PI_2) + game->vector.p_dirY * cos(M_PI_2);
+	}
 	if (key == D)
 	{
 		game->key.key_d = 1;
-		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
-			game->vector.p_posX += -game->vector.p_dirX * game->vector.p_Speed;
-		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY - game->vector.p_dirY * game->vector.p_Speed)])
-			game->vector.p_posY -= -game->vector.p_dirY * game->vector.p_Speed;
+		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(-M_PI_2) - game->vector.p_dirY * sin(-M_PI_2))][(int)(game->vector.p_posY)])
+			game->vector.p_posX += game->vector.p_dirX * cos(-M_PI_2) - game->vector.p_dirY * sin(-M_PI_2);
+		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(-M_PI_2) + game->vector.p_dirY * cos(-M_PI_2))])
+			game->vector.p_posY += game->vector.p_dirX * sin(-M_PI_2) + game->vector.p_dirY * cos(-M_PI_2);
 	}
 	if (key == LEFT)
 	{
 		game->key.key_left = 1;
-		double	o_dirX = game->vector.p_dirX;
-		game->vector.p_dirX = game->vector.p_dirX * cos(game->vector.rotSpeed) - game->vector.p_dirY * sin(game->vector.rotSpeed);
-		game->vector.p_dirY = o_dirX * sin(game->vector.rotSpeed) + game->vector.p_dirY * cos(game->vector.rotSpeed);
-		double	o_planeX = game->vector.planeX;
-		game->vector.planeX = game->vector.planeX * cos(game->vector.rotSpeed) - game->vector.planeY * sin(game->vector.rotSpeed);
-		game->vector.planeY = o_planeX * sin(game->vector.rotSpeed) + game->vector.planeY * cos(game->vector.rotSpeed);
+		rotate(game, game->vector.rotSpeed);
 	}
 	if (key == RIGHT)
 	{
 		game->key.key_right = 1;
-		double	o_dirX = game->vector.p_dirX;
-		game->vector.p_dirX = game->vector.p_dirX * cos(-game->vector.rotSpeed) - game->vector.p_dirY * sin(-game->vector.rotSpeed);
-		game->vector.p_dirY = o_dirX * sin(-game->vector.rotSpeed) + game->vector.p_dirY * cos(-game->vector.rotSpeed);
-		double	o_planeX = game->vector.planeX;
-		game->vector.planeX = game->vector.planeX * cos(-game->vector.rotSpeed) - game->vector.planeY * sin(-game->vector.rotSpeed);
-		game->vector.planeY = o_planeX * sin(-game->vector.rotSpeed) + game->vector.planeY * cos(-game->vector.rotSpeed);
+		rotate(game, -game->vector.rotSpeed);
 	}
 	if (key == ESC)
 		exit(0);
 	return (0);
+}
+
+int	click_exit()
+{
+	exit(1);
+	return (1);
 }
 
 int	release_key(int key, t_game *game)
@@ -339,6 +380,8 @@ int	release_key(int key, t_game *game)
 		game->key.key_left = 0;
 	if (key == RIGHT)
 		game->key.key_right = 0;
+	if (key == ESC)
+		exit(0);
 	return (0);
 }
 
@@ -376,7 +419,6 @@ int main()
 		write(1, ERROR, ft_strlen(ERROR));
 		return BAD_END;
 	}
-
 	game_init(game);
 
 	game->mlx.ptr = mlx_init();
@@ -388,6 +430,7 @@ int main()
 	game->mlx.addr = (int *)mlx_get_data_addr(game->mlx.img, &game->mlx.pixel, &game->mlx.size, &game->mlx.endian);
 	mlx_hook(game->mlx.win, 2, 0, &input_key, game);
 	// mlx_hook(game->mlx.win, 3, 0, &release_key, game);
+	mlx_hook(game->mlx.win, 17, 0, &click_exit, game);
 	mlx_loop_hook(game->mlx.ptr , &game_loop, game);
 	mlx_loop(game->mlx.ptr);
 
