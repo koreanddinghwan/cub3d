@@ -142,6 +142,8 @@ typedef struct s_game
 	int		*wall;
 }				t_game;
 
+void	rotate(t_game *game, double speed);
+
 int ft_strlen(char *str)
 {
 	int i;
@@ -160,7 +162,7 @@ void	game_init(t_game *game)
 	game->vector.p_dirY = 0.0;
 	game->vector.planeX = 0.0;
 	game->vector.planeY = 0.66;
-	game->vector.p_Speed = 0.3;
+	game->vector.p_Speed = 0.1;
 	game->vector.rotSpeed = 0.1;
 }
 
@@ -279,6 +281,42 @@ void	print_minimap(t_game *game)
 
 int	game_loop(t_game *game)
 {
+	if (game->key.key_w)
+	{
+		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
+			game->vector.p_posX += game->vector.p_dirX * game->vector.p_Speed;
+		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
+			game->vector.p_posY += game->vector.p_dirY * game->vector.p_Speed;
+	}
+	if (game->key.key_s)
+	{
+		if (!map[(int)(game->vector.p_posX - game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
+			game->vector.p_posX -= game->vector.p_dirX * game->vector.p_Speed;
+		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY - game->vector.p_dirY * game->vector.p_Speed)])
+			game->vector.p_posY -= game->vector.p_dirY * game->vector.p_Speed;
+	}
+	if (game->key.key_a)
+	{
+		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(M_PI_2) - game->vector.p_dirY * sin(M_PI_2))][(int)(game->vector.p_posY)])
+			game->vector.p_posX += game->vector.p_dirX * cos(M_PI_2) - game->vector.p_dirY * sin(M_PI_2);
+		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(M_PI_2) + game->vector.p_dirY * cos(M_PI_2))])
+			game->vector.p_posY += game->vector.p_dirX * sin(M_PI_2) + game->vector.p_dirY * cos(M_PI_2);
+	}
+	if (game->key.key_d)
+	{
+		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(-M_PI_2) - game->vector.p_dirY * sin(-M_PI_2))][(int)(game->vector.p_posY)])
+			game->vector.p_posX += game->vector.p_dirX * cos(-M_PI_2) - game->vector.p_dirY * sin(-M_PI_2);
+		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(-M_PI_2) + game->vector.p_dirY * cos(-M_PI_2))])
+			game->vector.p_posY += game->vector.p_dirX * sin(-M_PI_2) + game->vector.p_dirY * cos(-M_PI_2);
+	}
+	if (game->key.key_left)
+	{
+		rotate(game, game->vector.rotSpeed);
+	}
+	if (game->key.key_right)
+	{
+		rotate(game, -game->vector.rotSpeed);
+	}
 	t_dda dda;
 	int x;
 
@@ -316,44 +354,26 @@ int input_key(int key, t_game *game)
 	if (key == W)
 	{
 		game->key.key_w = 1;
-		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
-			game->vector.p_posX += game->vector.p_dirX * game->vector.p_Speed;
-		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
-			game->vector.p_posY += game->vector.p_dirY * game->vector.p_Speed;
 	}
 	if (key == S)
 	{
 		game->key.key_s = 1;
-		if (!map[(int)(game->vector.p_posX - game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
-			game->vector.p_posX -= game->vector.p_dirX * game->vector.p_Speed;
-		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY - game->vector.p_dirY * game->vector.p_Speed)])
-			game->vector.p_posY -= game->vector.p_dirY * game->vector.p_Speed;
 	}
 	if (key == A)
 	{
 		game->key.key_a = 1;
-		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(M_PI_2) - game->vector.p_dirY * sin(M_PI_2))][(int)(game->vector.p_posY)])
-			game->vector.p_posX += game->vector.p_dirX * cos(M_PI_2) - game->vector.p_dirY * sin(M_PI_2);
-		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(M_PI_2) + game->vector.p_dirY * cos(M_PI_2))])
-			game->vector.p_posY += game->vector.p_dirX * sin(M_PI_2) + game->vector.p_dirY * cos(M_PI_2);
 	}
 	if (key == D)
 	{
 		game->key.key_d = 1;
-		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(-M_PI_2) - game->vector.p_dirY * sin(-M_PI_2))][(int)(game->vector.p_posY)])
-			game->vector.p_posX += game->vector.p_dirX * cos(-M_PI_2) - game->vector.p_dirY * sin(-M_PI_2);
-		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(-M_PI_2) + game->vector.p_dirY * cos(-M_PI_2))])
-			game->vector.p_posY += game->vector.p_dirX * sin(-M_PI_2) + game->vector.p_dirY * cos(-M_PI_2);
 	}
 	if (key == LEFT)
 	{
 		game->key.key_left = 1;
-		rotate(game, game->vector.rotSpeed);
 	}
 	if (key == RIGHT)
 	{
 		game->key.key_right = 1;
-		rotate(game, -game->vector.rotSpeed);
 	}
 	if (key == ESC)
 		exit(0);
@@ -428,8 +448,8 @@ int main()
 	game->mlx.win = mlx_new_window(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT, "cub3D");
 	game->mlx.img = mlx_new_image(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT);
 	game->mlx.addr = (int *)mlx_get_data_addr(game->mlx.img, &game->mlx.pixel, &game->mlx.size, &game->mlx.endian);
-	mlx_hook(game->mlx.win, 2, 0, &input_key, game);
-	// mlx_hook(game->mlx.win, 3, 0, &release_key, game);
+	mlx_hook(game->mlx.win, 2, 1, &input_key, game);
+	mlx_hook(game->mlx.win, 3, 2, &release_key, game);
 	mlx_hook(game->mlx.win, 17, 0, &click_exit, game);
 	mlx_loop_hook(game->mlx.ptr , &game_loop, game);
 	mlx_loop(game->mlx.ptr);
