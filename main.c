@@ -287,11 +287,11 @@ int input_key(int key, t_game *game)
 	if (key == A)
 	{
 		game->key.key_a = 1;
-		if (!map[(int)(game->vector.p_posX - game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
-			game->vector.p_posX -= -game->vector.p_dirX * game->vector.p_Speed;
+		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
+			game->vector.p_posX += game->vector.p_dirX * cos(game->vector.p_Speed) - game->vector.p_dirY * sin(game->vector.p_Speed);
 		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
-			game->vector.p_posY += -game->vector.p_dirY * game->vector.p_Speed;
-	}
+			game->vector.p_posY += game->vector.p_dirY * sin(game->vector.p_Speed) + game->vector.p_dirY * cos(game->vector.p_Speed);
+	
 	if (key == D)
 	{
 		game->key.key_d = 1;
@@ -386,8 +386,8 @@ int main()
 	game->mlx.win = mlx_new_window(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT, "cub3D");
 	game->mlx.img = mlx_new_image(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT);
 	game->mlx.addr = (int *)mlx_get_data_addr(game->mlx.img, &game->mlx.pixel, &game->mlx.size, &game->mlx.endian);
-	mlx_hook(game->mlx.win, 2, 3, &input_key, game);
-	// mlx_hook(game->mlx.win, 3, 2, &release_key, game);
+	mlx_hook(game->mlx.win, 2, 0, &input_key, game);
+	// mlx_hook(game->mlx.win, 3, 0, &release_key, game);
 	mlx_loop_hook(game->mlx.ptr , &game_loop, game);
 	mlx_loop(game->mlx.ptr);
 
