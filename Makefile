@@ -9,9 +9,11 @@ PARSER_SRCS = $(addprefix ./src/parser/, check_open.c extension_checker.c make_m
 PARSER_OBJS = $(PARSER_SRCS:.c=.o)
 
 MAIN_SRCS = main.c
-MAIN_OBJS = $(MAIN_SRCS:.c=.o)
+KEY_SRCS = ./src/key/key.c
+RAYCASTING_SRCS = ./src/raycasting/ray.c
+UTILS_SRCS = ./src/utils/utils.c
 
-SRCS = $(MAIN_SRCS)
+SRCS = $(MAIN_SRCS) $(KEY_SRCS) $(RAYCASTING_SRCS) $(UTILS_SRCS)
 OBJS = $(SRCS:%.c=%.o)
 
 CC = cc
