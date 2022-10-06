@@ -11,8 +11,15 @@
 
 10.03 : deq 자료구조 추가
 10.04 : main문 수정
+10.06 : parser 끝!
 
-# PARSER 요구사항
+
+
+# PARSER test
+
+1. sh test.sh
+2. ./invalid_maps/ 와 textures 폴더 내의 파일로 테스트됨
+3. 
 
 
 
