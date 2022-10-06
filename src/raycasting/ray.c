@@ -73,7 +73,7 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 		dda->perpWallDist = (dda->mapX - game->vector.p_posX + (1 - dda->stepX) / 2) / game->vector.rayDirectionX;
 	else	// 부딪힌 광선이 y면
 		dda->perpWallDist = (dda->mapY - game->vector.p_posY + (1 - dda->stepY) / 2) / game->vector.rayDirectionY;
-	game->draw.draw_height = (int)(WIN_HEIGHT / dda->perpWallDist);
+	game->draw.draw_height = (int)(WIN_HEIGHT/ dda->perpWallDist);
 	game->draw.start = (-game->draw.draw_height / 2) + (WIN_HEIGHT / 2);
 	if (game->draw.start < 0)
 		game->draw.start = 0;
@@ -92,19 +92,17 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 		game->draw.texX = tex_size - game->draw.texX - 1;
 	game->draw.step = 1.0 * tex_size / game->draw.draw_height;
 	game->draw.texPos = (game->draw.start - WIN_HEIGHT / 2 + game->draw.draw_height / 2) * game->draw.step;
-        for (int y = 0; y < WIN_HEIGHT; y++)
-        {
-            game->draw.win_buf[y][x] = 0x000000; 
-            game->draw.win_buf[WIN_HEIGHT - y - 1][x] = 0xFFFFFF;
-        }
-	for (int y = game->draw.start; y < game->draw.end; y++)
+	int y = -1;
+	while (++y < WIN_HEIGHT)
+	{
+		game->draw.win_buf[y][x] = 0x663300;
+		game->draw.win_buf[WIN_HEIGHT - y - 1][x] = 0x00FFFF;
+	}
+	y = game->draw.start - 1;
+	while (++y < game->draw.end)
 	{
 		game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
 		game->draw.texPos += game->draw.step;
-		// int color = game->wall[tex_size * game->draw.texY + game->draw.texX];
-		// if (game->draw.side == 1)
-		// 	color = (color >> 8);  // & 8355711
-		// game->draw.win_buf[y][x] = color; //픽셀의 화면 버퍼
-        game->draw.win_buf[y][x] = game->wall[tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
+		game->draw.win_buf[y][x] = game->wall[tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
 	}
 }

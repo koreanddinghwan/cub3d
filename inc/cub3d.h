@@ -53,7 +53,7 @@ static int map[map_Height][map_Width] = {
 	{1, 1, 1, 1, 1, 1, 1},
 	{1, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 1, 0, 1},
+	{1, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1},
@@ -135,7 +135,7 @@ typedef struct s_minimap
 	int		endian;
 	int		ratio_w;
 	int		ratio_h;
-	int		mini_buf[mini_h][mini_w];
+	int		mini_buf[mini_w][mini_h];
 }				t_minimap;
 
 typedef struct s_bonus
@@ -173,5 +173,7 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x);
 *	util.c
 */
 void	rotate(t_game *game, double speed);
+
+void	print_minimap(t_game *game);
 
 #endif

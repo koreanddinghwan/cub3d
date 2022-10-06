@@ -15,7 +15,7 @@ int	game_loop(t_game *game)
 			game->mlx.addr[y * WIN_WIDTH + x] = game->draw.win_buf[y][x]; //픽셀의 화면 버퍼
 	}
 	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.img, 0, 0);
-	// print_minimap(game);
+	print_minimap(game);
 	return 0;
 }
 
@@ -40,7 +40,7 @@ void	wall_info_save(t_game *game)
 void	game_init(t_game *game)
 {
 	game->vector.p_posX = 3.5;
-	game->vector.p_posY = 3.5;
+	game->vector.p_posY = 2.5;
 	game->vector.p_dirX = -0.5;
 	game->vector.p_dirY = 0.0;
 	game->vector.planeX = 0.0;
