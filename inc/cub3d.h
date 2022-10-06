@@ -11,7 +11,7 @@
 # include "libft.h"
 
 /**
- * @brief WASD
+ * @brief WASD, ->, <-
  * 
  */
 # define W 13
@@ -28,13 +28,14 @@
 # define ESC 53
 
 /**
- * @brief RESOLUTION, MAP_SIZE
+ * @brief MAP_SIZE
  * 
  */
-# define WIN_WIDTH 640//640 1280
-# define WIN_HEIGHT 480//480 720
+# define WIN_WIDTH 1280//640 1280 1920
+# define WIN_HEIGHT 720//480 720 1080
 # define map_Width	7
 # define map_Height	7
+
 # define tex_size 64
 
 # define mini_w	200
@@ -48,11 +49,11 @@
 # define GOOD_END 0
 # define BAD_END 1
 
-static int map[map_Width][map_Height] = {
+static int map[map_Height][map_Width] = {
 	{1, 1, 1, 1, 1, 1, 1},
 	{1, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 1, 0, 1},
 	{1, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1},

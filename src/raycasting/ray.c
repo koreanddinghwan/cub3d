@@ -11,6 +11,11 @@ void    raycasting(t_game *game)
 		game->vector.cameraX = (2 * x / (double)(WIN_WIDTH)) - 1;
 		game->vector.rayDirectionX = game->vector.p_dirX + game->vector.planeX * game->vector.cameraX;
 		game->vector.rayDirectionY = game->vector.p_dirY + game->vector.planeY * game->vector.cameraX;
+        dda.mapX = (int)(game->vector.p_posX);
+	    dda.mapY = (int)(game->vector.p_posY);
+	    dda.deltaDistX = fabs(EOF / game->vector.rayDirectionX);
+	    dda.deltaDistY = fabs(EOF / game->vector.rayDirectionY);
+	    game->draw.hit = 0;
 		dda_init(game, &dda);
 		cal_camera_dir(game, &dda, x);
 	}
@@ -18,12 +23,6 @@ void    raycasting(t_game *game)
 
 void	dda_init(t_game *game, t_dda *dda)
 {
-	dda->mapX = (int)(game->vector.p_posX);
-	dda->mapY = (int)(game->vector.p_posY);
-	dda->deltaDistX = fabs(1 / game->vector.rayDirectionX);
-	dda->deltaDistY = fabs(1 / game->vector.rayDirectionY);
-	game->draw.hit = 0;
-
 	if (game->vector.rayDirectionX < 0)
 	{
 		dda->stepX = -1;
@@ -102,9 +101,10 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 	{
 		game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
 		game->draw.texPos += game->draw.step;
-		int color = game->wall[tex_size * game->draw.texY + game->draw.texX];
-		if (game->draw.side == 1)
-			color = (color >> 8);  // & 8355711
-		game->draw.win_buf[y][x] = color; //픽셀의 화면 버퍼
+		// int color = game->wall[tex_size * game->draw.texY + game->draw.texX];
+		// if (game->draw.side == 1)
+		// 	color = (color >> 8);  // & 8355711
+		// game->draw.win_buf[y][x] = color; //픽셀의 화면 버퍼
+        game->draw.win_buf[y][x] = game->wall[tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
 	}
 }

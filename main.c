@@ -19,22 +19,20 @@ int	game_loop(t_game *game)
 	return 0;
 }
 
-void	show_wall(t_game *game)
+void	wall_info_save(t_game *game)
 {
 	t_mlx	img;
+	int		x;
+	int 	y;
 
 	img.img = mlx_xpm_file_to_image(game->mlx.ptr, "./images/wall_w.xpm", &img.w, &img.h);
 	img.addr = (int *)mlx_get_data_addr(img.img, &img.pixel, &img.size, &img.endian);
-	int y = 0;
-	while (y < img.h)
+	y = -1;
+	while (++y < img.h)
 	{
-		int x = 0;
-		while (x < img.w)
-		{
+		x = -1;
+		while (++x < img.w)
 			game->wall[x + img.w * y] = img.addr[x + img.w * y];
-			x++;
-		}
-		y++;
 	}
 	mlx_destroy_image(game->mlx.ptr, img.img);
 }
@@ -48,7 +46,7 @@ void	game_init(t_game *game)
 	game->vector.planeX = 0.0;
 	game->vector.planeY = 0.66;
 	game->vector.p_Speed = 0.1;
-	game->vector.rotSpeed = 0.1;
+	game->vector.rotSpeed = 0.06;
 }
 
 int main()
@@ -65,12 +63,12 @@ int main()
 		write(1, ERROR, ft_strlen(ERROR));
 		return BAD_END;
 	}
-	game_init(game);
 	game->mlx.ptr = mlx_init();
-	show_wall(game);
 	game->mlx.win = mlx_new_window(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT, "cub3D");
 	game->mlx.img = mlx_new_image(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT);
 	game->mlx.addr = (int *)mlx_get_data_addr(game->mlx.img, &game->mlx.pixel, &game->mlx.size, &game->mlx.endian);
+	game_init(game);
+	wall_info_save(game);
 	mlx_hook(game->mlx.win, 2, 1, &input_key, game);
 	mlx_hook(game->mlx.win, 3, 2, &release_key, game);
 	mlx_hook(game->mlx.win, 17, 0, &click_exit, game);
