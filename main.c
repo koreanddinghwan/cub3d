@@ -19,22 +19,32 @@ int	game_loop(t_game *game)
 	return 0;
 }
 
-void	wall_info_save(t_game *game)
+void	images_per_save(t_game *game, char *file_name, int index)
 {
-	t_mlx	img;
-	int		x;
-	int 	y;
+	t_mlx img;
+	int y, x;
 
-	img.img = mlx_xpm_file_to_image(game->mlx.ptr, "./images/wall_w.xpm", &img.w, &img.h);
-	img.addr = (int *)mlx_get_data_addr(img.img, &img.pixel, &img.size, &img.endian);
+	img.img_test[index] = mlx_xpm_file_to_image(game->mlx.ptr, file_name, &img.w, &img.h);
+	img.addr = (int *)mlx_get_data_addr(img.img_test[index], &img.pixel, &img.size, &img.endian);
 	y = -1;
 	while (++y < img.h)
 	{
 		x = -1;
 		while (++x < img.w)
-			game->wall[x + img.w * y] = img.addr[x + img.w * y];
+			game->wall[index][x + img.w * y] = img.addr[x + img.w * y];
 	}
-	mlx_destroy_image(game->mlx.ptr, img.img);
+}
+
+void	wall_info_save(t_game *game)
+{
+	int		x;
+	int 	y;
+	
+	images_per_save(game, "./src/parser/textures/eagle.xpm", 0);
+	images_per_save(game, "./images/wall_w.xpm", 1);
+	images_per_save(game, "./src/parser/textures/barrel.xpm", 2);
+	images_per_save(game, "./src/parser/textures/pillar.xpm", 3);
+	// mlx_destroy_image(game->mlx.ptr, img.img_test[0]);
 }
 
 void	game_init(t_game *game)
@@ -58,10 +68,15 @@ int main()
 		write(1, ERROR, ft_strlen(ERROR));
 		return BAD_END;
 	}
-	if (!(game->wall = (int *)malloc(sizeof(int) * tex_size * tex_size)))
+	game->wall = (int **)malloc(sizeof(int *) * 4);
+	for (int i = 0; i < 4; i++)
 	{
-		write(1, ERROR, ft_strlen(ERROR));
-		return BAD_END;
+		if (!(game->wall[i] = (int *)malloc(sizeof(int) * tex_size * tex_size)))
+		{
+			write(1, ERROR, ft_strlen(ERROR));
+			return BAD_END;
+		}
+
 	}
 	game->mlx.ptr = mlx_init();
 	game->mlx.win = mlx_new_window(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT, "cub3D");

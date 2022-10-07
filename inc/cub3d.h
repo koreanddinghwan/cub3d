@@ -52,10 +52,10 @@
 static int map[map_Height][map_Width] = {
 	{1, 1, 1, 1, 1, 1, 1},
 	{1, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 1, 0, 0, 1},
+	{1, 0, 0, 0, 1, 0, 1},
 	{1, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 1, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1},
 
 };
@@ -65,6 +65,7 @@ typedef struct s_mlx
 	void	*ptr;
 	void	*win;
 	void	*img;
+	void	*img_test[4];
 	int		*addr;
 	int		w;
 	int		h;
@@ -150,7 +151,7 @@ typedef struct s_game
 	t_draw	draw;
 	t_key	key;
 	t_minimap mini;
-	int		*wall;
+	int		**wall;
 }				t_game;
 
 /*

@@ -101,8 +101,32 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 	y = game->draw.start - 1;
 	while (++y < game->draw.end)
 	{
+		if (game->draw.side == 0)
+		{
+			if ((game->vector.rayDirectionY <= 0 && game->vector.rayDirectionX <= 0) || (game->vector.rayDirectionY > 0) && game->vector.rayDirectionX <= 0)
+			{
+			game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
+			game->draw.texPos += game->draw.step;
+			game->draw.win_buf[y][x] = game->wall[0][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
+			}
+			else
+			{
+			game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
+			game->draw.texPos += game->draw.step;
+			game->draw.win_buf[y][x] = game->wall[1][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
+			}
+		}
+		else if (game->draw.side == 1 && ((game->vector.rayDirectionY <= 0 && game->vector.rayDirectionX <= 0) || (game->vector.rayDirectionY <= 0) && game->vector.rayDirectionX > 0))
+		{
 		game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
 		game->draw.texPos += game->draw.step;
-		game->draw.win_buf[y][x] = game->wall[tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
+		game->draw.win_buf[y][x] = game->wall[2][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
+		}
+		else
+		{
+		game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
+		game->draw.texPos += game->draw.step;
+		game->draw.win_buf[y][x] = game->wall[3][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
+		}
 	}
 }
