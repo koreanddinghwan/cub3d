@@ -52,30 +52,30 @@ void    key_check(t_game *game)
 {
     if (game->key.key_w)
 	{
-		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
+		if (!game->map->map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
 			game->vector.p_posX += game->vector.p_dirX * game->vector.p_Speed;
-		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
+		if (!game->map->map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
 			game->vector.p_posY += game->vector.p_dirY * game->vector.p_Speed;
 	}
 	if (game->key.key_s)
 	{
-		if (!map[(int)(game->vector.p_posX - game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
+		if (!game->map->map[(int)(game->vector.p_posX - game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
 			game->vector.p_posX -= game->vector.p_dirX * game->vector.p_Speed;
-		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY - game->vector.p_dirY * game->vector.p_Speed)])
+		if (!game->map->map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY - game->vector.p_dirY * game->vector.p_Speed)])
 			game->vector.p_posY -= game->vector.p_dirY * game->vector.p_Speed;
 	}
 	if (game->key.key_a)
 	{
-		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(M_PI_2) - game->vector.p_dirY * sin(M_PI_2))][(int)(game->vector.p_posY)])
+		if (!game->map->map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(M_PI_2) - game->vector.p_dirY * sin(M_PI_2))][(int)(game->vector.p_posY)])
 			game->vector.p_posX += game->vector.p_dirX * cos(M_PI_2) - game->vector.p_dirY * sin(M_PI_2);
-		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(M_PI_2) + game->vector.p_dirY * cos(M_PI_2))])
+		if (!game->map->map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(M_PI_2) + game->vector.p_dirY * cos(M_PI_2))])
 			game->vector.p_posY += game->vector.p_dirX * sin(M_PI_2) + game->vector.p_dirY * cos(M_PI_2);
 	}
 	if (game->key.key_d)
 	{
-		if (!map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(-M_PI_2) - game->vector.p_dirY * sin(-M_PI_2))][(int)(game->vector.p_posY)])
+		if (!game->map->map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(-M_PI_2) - game->vector.p_dirY * sin(-M_PI_2))][(int)(game->vector.p_posY)])
 			game->vector.p_posX += game->vector.p_dirX * cos(-M_PI_2) - game->vector.p_dirY * sin(-M_PI_2);
-		if (!map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(-M_PI_2) + game->vector.p_dirY * cos(-M_PI_2))])
+		if (!game->map->map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(-M_PI_2) + game->vector.p_dirY * cos(-M_PI_2))])
 			game->vector.p_posY += game->vector.p_dirX * sin(-M_PI_2) + game->vector.p_dirY * cos(-M_PI_2);
 	}
 	if (game->key.key_left)

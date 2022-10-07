@@ -62,7 +62,7 @@ int symbol_identifier(char *str, t_map *map)
 	return (id);
 }
 
-void symbol_update(t_map *map, int id, void *mlx_ptr)
+void symbol_update(t_map *map, int id)
 {
 	if (id == MAP)
 		return ;
@@ -70,7 +70,7 @@ void symbol_update(t_map *map, int id, void *mlx_ptr)
 	if (map->symbols[id] == 2)
 		error_exit("dup symbol\n");
 	if (id >= 0 && id <= 3)
-		get_img_pointer(map, id, mlx_ptr);
+		get_img_pointer(map, id);
 	else
 		get_rgb(map, id);
 }
@@ -87,7 +87,7 @@ void symbol_missing(t_map *map)
 	}
 }
 
-void map_make(t_map *map, void *mlx_ptr)
+void map_make(t_map *map)
 {
 	int  id;
 	t_dlst *node;
@@ -96,7 +96,7 @@ void map_make(t_map *map, void *mlx_ptr)
 	while (1)
 	{
 		id = symbol_identifier(node->content, map);
-		symbol_update(map, id, mlx_ptr);
+		symbol_update(map, id);
 		if (id == MAP)
 			break ;
 		node = node->next;

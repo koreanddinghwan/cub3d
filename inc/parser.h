@@ -46,6 +46,8 @@ typedef struct s_map
 	int max_map_width;//
 	int map_height;//
 	e_map view;
+	int	p_x;
+	int p_y;
 	int symbols[6];
 	char *buffer;
 	t_deque *map_deq;

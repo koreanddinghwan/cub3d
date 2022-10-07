@@ -9,6 +9,7 @@
 # include <math.h>
 # include "../minilibx_opengl_20191021/mlx.h"
 # include "libft.h"
+# include "./parser.h"
 
 /**
  * @brief WASD, ->, <-
@@ -49,16 +50,16 @@
 # define GOOD_END 0
 # define BAD_END 1
 
-static int map[map_Height][map_Width] = {
-	{1, 1, 1, 1, 1, 1, 1},
-	{1, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 1, 0, 0, 1},
-	{1, 0, 0, 0, 1, 0, 1},
-	{1, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 1, 0, 0, 1},
-	{1, 1, 1, 1, 1, 1, 1},
+// static int map[map_Height][map_Width] = {
+// 	{1, 1, 1, 1, 1, 1, 1},
+// 	{1, 0, 0, 0, 0, 0, 1},
+// 	{1, 0, 0, 1, 0, 0, 1},
+// 	{1, 0, 0, 0, 1, 0, 1},
+// 	{1, 0, 0, 0, 0, 0, 1},
+// 	{1, 0, 0, 1, 0, 0, 1},
+// 	{1, 1, 1, 1, 1, 1, 1},
 
-};
+// };
 
 typedef struct s_mlx
 {
@@ -150,6 +151,7 @@ typedef struct s_game
 	t_vector vector;
 	t_draw	draw;
 	t_key	key;
+	t_map	*map;
 	t_minimap mini;
 	int		**wall;
 }				t_game;
