@@ -63,9 +63,10 @@ void	game_init(t_game *game, char *path)
 	else if (game->map->view == PLAYER_W)
 		rotate(game, M_PI_2);
 	else
-		rotate(game, -M_PI_2); 
+		rotate(game, -M_PI_2);
 	game->vector.p_Speed = 0.1;
 	game->vector.rotSpeed = 0.06;
+	game->t = 0;
 }
 
 int main(int ac, char *av[])

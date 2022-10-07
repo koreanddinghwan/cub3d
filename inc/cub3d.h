@@ -153,6 +153,7 @@ typedef struct s_game
 	t_key	key;
 	t_map	*map;
 	t_minimap mini;
+	unsigned long long t;
 	int		**wall;
 }				t_game;
 

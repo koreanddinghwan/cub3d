@@ -2,20 +2,20 @@
 
 void    raycasting(t_game *game)
 {
-    t_dda dda;
-    int x;
+	t_dda dda;
+	int x;
 
-    x = -1;
-    while (++x < WIN_WIDTH)
+	x = -1;
+	while (++x < WIN_WIDTH)
 	{
 		game->vector.cameraX = (2 * x / (double)(WIN_WIDTH)) - 1;
 		game->vector.rayDirectionX = game->vector.p_dirX + game->vector.planeX * game->vector.cameraX;
 		game->vector.rayDirectionY = game->vector.p_dirY + game->vector.planeY * game->vector.cameraX;
-        dda.mapX = (int)(game->vector.p_posX);
-	    dda.mapY = (int)(game->vector.p_posY);
-	    dda.deltaDistX = fabs(EOF / game->vector.rayDirectionX);
-	    dda.deltaDistY = fabs(EOF / game->vector.rayDirectionY);
-	    game->draw.hit = 0;
+		dda.mapX = (int)(game->vector.p_posX);
+		dda.mapY = (int)(game->vector.p_posY);
+		dda.deltaDistX = fabs(EOF / game->vector.rayDirectionX);
+		dda.deltaDistY = fabs(EOF / game->vector.rayDirectionY);
+		game->draw.hit = 0;
 		dda_init(game, &dda);
 		cal_camera_dir(game, &dda, x);
 	}
@@ -86,6 +86,7 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 		game->draw.wallX = game->vector.p_posX + dda->perpWallDist * game->vector.rayDirectionX;
 	game->draw.wallX = game->draw.wallX - (int)game->draw.wallX;
 	game->draw.texX = (int)(game->draw.wallX * (double)tex_size);
+
 	if (game->draw.side == 0 && game->vector.rayDirectionX > 0)
 		game->draw.texX = tex_size - game->draw.texX - 1;
 	if (game->draw.side == 1 && game->vector.rayDirectionY < 0)
@@ -105,28 +106,28 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 		{
 			if ((game->vector.rayDirectionY <= 0 && game->vector.rayDirectionX <= 0) || (game->vector.rayDirectionY > 0) && game->vector.rayDirectionX <= 0)
 			{
-			game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
-			game->draw.texPos += game->draw.step;
-			game->draw.win_buf[y][x] = game->wall[0][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
+				game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
+				game->draw.texPos += game->draw.step;
+				game->draw.win_buf[y][x] = game->wall[0][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
 			}
 			else
 			{
-			game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
-			game->draw.texPos += game->draw.step;
-			game->draw.win_buf[y][x] = game->wall[1][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
+				game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
+				game->draw.texPos += game->draw.step;
+				game->draw.win_buf[y][x] = game->wall[1][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
 			}
 		}
 		else if (game->draw.side == 1 && ((game->vector.rayDirectionY <= 0 && game->vector.rayDirectionX <= 0) || (game->vector.rayDirectionY <= 0) && game->vector.rayDirectionX > 0))
 		{
-		game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
-		game->draw.texPos += game->draw.step;
-		game->draw.win_buf[y][x] = game->wall[2][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
+			game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
+			game->draw.texPos += game->draw.step;
+			game->draw.win_buf[y][x] = game->wall[2][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
 		}
 		else
 		{
-		game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
-		game->draw.texPos += game->draw.step;
-		game->draw.win_buf[y][x] = game->wall[3][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
+			game->draw.texY = (int)game->draw.texPos & (tex_size - 1);
+			game->draw.texPos += game->draw.step;
+			game->draw.win_buf[y][x] = game->wall[3][tex_size * game->draw.texY + game->draw.texX]; //픽셀의 화면 버퍼
 		}
 	}
 }
