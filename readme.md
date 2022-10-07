@@ -12,12 +12,16 @@
 10.03 : deq 자료구조 추가<br/>
 10.04 : 키입력 mlx_hook기능 추가<br/>
 10.05 : A, D(좌,우) 움직이는 기능 추가<br/>
-
-# PARSER 요구사항
-
-
+10.04 : main문 수정
+10.06 : parser 끝!
 
 
+
+# PARSER test
+
+1. sh test.sh
+2. ./invalid_maps/ 와 textures 폴더 내의 파일로 테스트됨
+3. 
 
 
 

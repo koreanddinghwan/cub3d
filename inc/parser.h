@@ -21,13 +21,27 @@ typedef enum idnt
 	END
 } e_symbol_id;
 
+t_map *parser(char *path, void *mlx_ptr);
+int map_open(char *path);
+void map_reader(t_map *map, int fd);
+void map_make(t_map *map, void *mlx_ptr);
+void map_fill(t_map *map, t_dlst *start);
+void map_validation(t_map *map);
+
 void extension_checker(char *path, char *ext);
 int check_open(char *path);
 void error_exit(char *str);
-void map_reader(t_map *map, int fd);
 void delete_splited(char **sp);
-t_map *parser(char *path, void *mlx_ptr);
-void get_map_data(t_map *map, int fd, void *mlx_ptr);
-void make_map(t_map *map, t_dlst *start);
+/*
+ * F 220,100,0
+ *
+ * C 225,30,0
+ * */
+void get_img_pointer(t_map *map, int id, void *mlx_ptr);
+void get_rgb(t_map *map, int id);
 
+/*
+ * @tools
+ * */
+int split_len(char **sp);
 #endif
