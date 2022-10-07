@@ -21,7 +21,7 @@ int blank_surroundings(t_map *map, int i, int j)
 	return (TRUE);
 }
 
-void validation(t_map *map, int i, int j)
+void validation(t_map *map, int i, int j, int *view)
 {
 	//상단, 하단 확인
 	if (i == map->map_height || i == 0)
@@ -41,13 +41,22 @@ void validation(t_map *map, int i, int j)
 		if (blank_surroundings(map, i, j) == FALSE)
 			error_exit("Not Valid Map");
 	}
+	else if (map->map[i][j] >= 4 && map->map[i][j] <= 7)
+	{
+		if (*view != 0)
+			error_exit("Not Valid Map");
+		else
+			*view = map->map[i][j];
+	}
 }
 
 void map_validation(t_map *map)
 {
 	int i;
 	int j;
+	int view;
 
+	view = 0;
 	if (map->map_height == 1 || map->max_map_width == 1)
 		error_exit("map validation error\n");
 	i = 0;
@@ -55,7 +64,7 @@ void map_validation(t_map *map)
 	{
 		j = 0;
 		while (j < map->max_map_width)
-			validation(map, i, j++);
+			validation(map, i, j++, &view);
 		i++;
 	}
 }
