@@ -1,8 +1,8 @@
 #include "../../inc/parser.h"
 
-void init_map(t_map **map)
+void	init_map(t_map **map)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	*map = malloc(sizeof(t_map));
@@ -22,9 +22,9 @@ void init_map(t_map **map)
 	(*map)->EA = NULL;
 }
 
-t_map *parser(char *path)
+t_map	*parser(char *path)
 {
-	t_map *map;
+	t_map	*map;
 
 	init_map(&map);
 	map_reader(map, map_open(path));

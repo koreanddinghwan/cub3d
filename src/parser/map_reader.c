@@ -1,18 +1,18 @@
 #include "../../inc/parser.h"
 
-char *trim_newline(char *str)
+char	*trim_newline(char *str)
 {
-	char *rtn;
+	char	*rtn;
 
 	rtn = ft_strtrim(str, "\n");
 	free(str);
 	return (rtn);
 }
 
-void map_reader(t_map *map, int fd)
+void	map_reader(t_map *map, int fd)
 {
-	char *str;
-	int  len;
+	char	*str;
+	int		len;
 
 	map->map_deq = ft_deq_new();
 	while (1)
@@ -25,7 +25,7 @@ void map_reader(t_map *map, int fd)
 		if (len == 0)
 		{
 			free(str);
-			continue;
+			continue ;
 		}
 		ft_deq_insert_rear(map->map_deq, str);
 	}
