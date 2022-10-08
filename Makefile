@@ -5,8 +5,8 @@ FTDIR = ./libft/
 FT = libft.a
 FTINC = ./libft/
 
-PARSER_SRCS = $(addprefix ./src/parser/, check_open.c extension_checker.c make_map.c parser.c)
-PARSER_OBJS = $(PARSER_SRCS:.c=.o)
+PARSER_SRCS = $(addprefix ./src/parser/, check_open.c extension_checker.c delete_splited.c error_exit.c get_image_ptr.c get_rgb.c \
+map_fill.c map_open.c map_reader.c map_validation.c map_make.c parser.c tools.c)
 
 MAIN_SRCS = main.c
 KEY_SRCS = ./src/key/key.c
@@ -14,7 +14,7 @@ RAYCASTING_SRCS = ./src/raycasting/ray.c
 UTILS_SRCS = ./src/utils/utils.c
 BONUS_SRCS = ./src/bonus/minimap.c
 
-SRCS = $(MAIN_SRCS) $(KEY_SRCS) $(RAYCASTING_SRCS) $(UTILS_SRCS) $(BONUS_SRCS)
+SRCS = $(MAIN_SRCS) $(KEY_SRCS) $(RAYCASTING_SRCS) $(UTILS_SRCS) $(BONUS_SRCS) $(PARSER_SRCS)
 OBJS = $(SRCS:%.c=%.o)
 
 CC = cc

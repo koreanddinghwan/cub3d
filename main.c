@@ -39,30 +39,44 @@ void	wall_info_save(t_game *game)
 {
 	int		x;
 	int 	y;
-	
-	images_per_save(game, "./src/parser/textures/eagle.xpm", 0);
-	images_per_save(game, "./images/wall_w.xpm", 1);
-	images_per_save(game, "./src/parser/textures/barrel.xpm", 2);
-	images_per_save(game, "./src/parser/textures/pillar.xpm", 3);
+
+	images_per_save(game, game->map->NO, 0); // N
+	images_per_save(game, game->map->SO, 1); // S
+	images_per_save(game, game->map->WE, 2); // W
+	images_per_save(game, game->map->EA, 3); // E
 	// mlx_destroy_image(game->mlx.ptr, img.img_test[0]);
 }
 
-void	game_init(t_game *game)
+void	game_init(t_game *game, char *path)
 {
-	game->vector.p_posX = 3.5;
-	game->vector.p_posY = 2.5;
+	game->map = parser(path);
+	game->vector.p_posX = game->map->p_x;
+	game->vector.p_posY = game->map->p_y;
 	game->vector.p_dirX = -0.5;
 	game->vector.p_dirY = 0.0;
 	game->vector.planeX = 0.0;
 	game->vector.planeY = 0.66;
+	if (game->map->view == PLAYER_N)
+		game->vector.p_dirX = -0.5;
+	else if (game->map->view == PLAYER_S)
+		game->vector.p_dirX = 0.5;
+	else if (game->map->view == PLAYER_W)
+		rotate(game, M_PI_2);
+	else
+		rotate(game, -M_PI_2); 
 	game->vector.p_Speed = 0.1;
 	game->vector.rotSpeed = 0.06;
 }
 
-int main()
+int main(int ac, char *av[])
 {
 	t_game	*game;
 
+	if (ac != 2)
+	{
+		write(1, ERROR, ft_strlen(ERROR));
+		return BAD_END;
+	}
 	if (!(game = malloc(sizeof(t_game))))
 	{
 		write(1, ERROR, ft_strlen(ERROR));
@@ -82,7 +96,7 @@ int main()
 	game->mlx.win = mlx_new_window(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT, "cub3D");
 	game->mlx.img = mlx_new_image(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT);
 	game->mlx.addr = (int *)mlx_get_data_addr(game->mlx.img, &game->mlx.pixel, &game->mlx.size, &game->mlx.endian);
-	game_init(game);
+	game_init(game, av[1]);
 	wall_info_save(game);
 	mlx_hook(game->mlx.win, 2, 1, &input_key, game);
 	mlx_hook(game->mlx.win, 3, 2, &release_key, game);
