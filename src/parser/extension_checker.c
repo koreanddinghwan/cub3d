@@ -1,8 +1,8 @@
 #include "../../inc/parser.h"
 
-void extension_checker(char *path, char *ext)
+void	extension_checker(char *path, char *ext)
 {
-	char *dot;
+	char	*dot;
 
 	dot = ft_strrchr(path, '.');
 	if (!dot || ft_strcmp(dot, ext) != 0)

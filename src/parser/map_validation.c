@@ -21,6 +21,18 @@ int	blank_surroundings(t_map *map, int i, int j)
 	return (TRUE);
 }
 
+void	change_player_viewpos(t_map *map, int i, int j, int *view)
+{
+	if (*view != 0)
+		error_exit("Not Valid Map");
+	else
+	{
+		*view = map->map[i][j];
+		map->p_x = i;
+		map->p_y = j;
+	}
+}
+
 void	validation(t_map *map, int i, int j, int *view)
 {
 	if (i == map->map_height || i == 0)
@@ -42,16 +54,7 @@ void	validation(t_map *map, int i, int j, int *view)
 			error_exit("Not Valid Map");
 	}
 	else if (map->map[i][j] >= 4 && map->map[i][j] <= 7)
-	{
-		if (*view != 0)
-			error_exit("Not Valid Map");
-		else
-		{
-			*view = map->map[i][j];
-			map->p_x = i;
-			map->p_y = j;
-		}
-	}
+		change_player_viewpos(map, i, j, view);
 }
 
 void	map_validation(t_map *map)

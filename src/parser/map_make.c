@@ -49,7 +49,7 @@ void	symbol_update(t_map *map, int id)
 
 void	symbol_missing(t_map *map)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 6)

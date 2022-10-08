@@ -40,8 +40,8 @@ typedef struct s_map
 	char *SO;//
 	char *WE;//
 	char *EA;//
-	int F[3]; //floor rgb
-	int C[3]; //ceiling rgb
+	int f_rgb;
+	int c_rgb;
 	int **map; //
 	int max_map_width;//
 	int map_height;//
@@ -66,16 +66,11 @@ void extension_checker(char *path, char *ext);
 int check_open(char *path);
 void error_exit(char *str);
 void delete_splited(char **sp);
-/*
- * F 220,100,0
- *
- * C 225,30,0
- * */
 void get_img_pointer(t_map *map, int id);
 void get_rgb(t_map *map, int id);
 
 /*
- * @tools
+ * @brief tools
  * */
 int split_len(char **sp);
 #endif

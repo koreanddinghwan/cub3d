@@ -1,6 +1,6 @@
 #include "../../inc/parser.h"
 
-void get_img_pointer(t_map *map, int id)
+void	get_img_pointer(t_map *map, int id)
 {
 	extension_checker(map->buffer, ".xpm");
 	if (id == NO)

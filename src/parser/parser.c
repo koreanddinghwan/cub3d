@@ -4,15 +4,9 @@ void	init_map(t_map **map)
 {
 	int	i;
 
-	i = 0;
 	*map = malloc(sizeof(t_map));
 	if (!*map)
 		error_exit("map alloc error");
-	while (i < 3)
-		(*map)->F[i++] = -1;
-	i = 0;
-	while (i < 3)
-		(*map)->C[i++] = -1;
 	i = 0;
 	while (i < 6)
 		(*map)->symbols[i++] = 0;
@@ -20,6 +14,8 @@ void	init_map(t_map **map)
 	(*map)->SO = NULL;
 	(*map)->WE = NULL;
 	(*map)->EA = NULL;
+	(*map)->f_rgb = 0;
+	(*map)->c_rgb = 0;
 }
 
 t_map	*parser(char *path)
