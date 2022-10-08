@@ -40,10 +40,10 @@ void	wall_info_save(t_game *game)
 	int		x;
 	int 	y;
 
-	images_per_save(game, game->map->NO, 0); // N
-	images_per_save(game, game->map->SO, 1); // S
-	images_per_save(game, game->map->WE, 2); // W
-	images_per_save(game, game->map->EA, 3); // E
+	images_per_save(game, game->map->no, 0); // N
+	images_per_save(game, game->map->so, 1); // S
+	images_per_save(game, game->map->we, 2); // W
+	images_per_save(game, game->map->ea, 3); // E
 	// mlx_destroy_image(game->mlx.ptr, img.img_test[0]);
 }
 

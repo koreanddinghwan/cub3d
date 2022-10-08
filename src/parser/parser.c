@@ -1,4 +1,4 @@
-#include "../../inc/parser.h"
+#include "./local_parser.h"
 
 void	init_map(t_map **map)
 {
@@ -10,10 +10,10 @@ void	init_map(t_map **map)
 	i = 0;
 	while (i < 6)
 		(*map)->symbols[i++] = 0;
-	(*map)->NO = NULL;
-	(*map)->SO = NULL;
-	(*map)->WE = NULL;
-	(*map)->EA = NULL;
+	(*map)->no = NULL;
+	(*map)->so = NULL;
+	(*map)->we = NULL;
+	(*map)->ea = NULL;
 	(*map)->f_rgb = 0;
 	(*map)->c_rgb = 0;
 }

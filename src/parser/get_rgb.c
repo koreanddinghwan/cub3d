@@ -1,4 +1,4 @@
-#include "../../inc/parser.h"
+#include "./local_parser.h"
 
 void	char_check(char *buf)
 {
