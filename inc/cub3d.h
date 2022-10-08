@@ -11,55 +11,25 @@
 # include "libft.h"
 # include "./parser.h"
 
-/**
- * @brief WASD, ->, <-
- * 
- */
 # define W 13
 # define A 0
 # define S 1
 # define D 2
 # define LEFT 123
 # define RIGHT 124
-
-/**
- * @brief ESC
- * 
- */
 # define ESC 53
-
-/**
- * @brief MAP_SIZE
- * 
- */
 # define WIN_WIDTH 1280//640 1280 1920
 # define WIN_HEIGHT 720//480 720 1080
 # define map_Width	7
 # define map_Height	7
-
 # define tex_size 64
 
 # define mini_w	200
 # define mini_h 100
 
-/**
- * @brief TOOL
- * 
- */
 # define ERROR "ERROR\n"
 # define GOOD_END 0
 # define BAD_END 1
-
-// static int map[map_Height][map_Width] = {
-// 	{1, 1, 1, 1, 1, 1, 1},
-// 	{1, 0, 0, 0, 0, 0, 1},
-// 	{1, 0, 0, 1, 0, 0, 1},
-// 	{1, 0, 0, 0, 1, 0, 1},
-// 	{1, 0, 0, 0, 0, 0, 1},
-// 	{1, 0, 0, 1, 0, 0, 1},
-// 	{1, 1, 1, 1, 1, 1, 1},
-
-// };
 
 typedef struct s_mlx
 {
