@@ -1,6 +1,6 @@
-#include "../../inc/parser.h"
+#include "./local_parser.h"
 
-void error_exit(char *str)
+void	error_exit(char *str)
 {
 	ft_putendl_fd("Error\n", 2);
 	ft_putendl_fd(str, 2);

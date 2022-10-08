@@ -1,30 +1,26 @@
-#include "../../inc/parser.h"
+#include "./local_parser.h"
 
-void init_map(t_map **map)
+void	init_map(t_map **map)
 {
-	int i;
+	int	i;
 
-	i = 0;
 	*map = malloc(sizeof(t_map));
 	if (!*map)
 		error_exit("map alloc error");
-	while (i < 3)
-		(*map)->F[i++] = -1;
-	i = 0;
-	while (i < 3)
-		(*map)->C[i++] = -1;
 	i = 0;
 	while (i < 6)
 		(*map)->symbols[i++] = 0;
-	(*map)->NO = NULL;
-	(*map)->SO = NULL;
-	(*map)->WE = NULL;
-	(*map)->EA = NULL;
+	(*map)->no = NULL;
+	(*map)->so = NULL;
+	(*map)->we = NULL;
+	(*map)->ea = NULL;
+	(*map)->f_rgb = 0;
+	(*map)->c_rgb = 0;
 }
 
-t_map *parser(char *path)
+t_map	*parser(char *path)
 {
-	t_map *map;
+	t_map	*map;
 
 	init_map(&map);
 	map_reader(map, map_open(path));

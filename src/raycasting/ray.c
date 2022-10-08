@@ -96,8 +96,8 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 	int y = -1;
 	while (++y < WIN_HEIGHT)
 	{
-		game->draw.win_buf[y][x] = 0x663300;
-		game->draw.win_buf[WIN_HEIGHT - y - 1][x] = 0x00FFFF;
+		game->draw.win_buf[y][x] = game->map->f_rgb;
+		game->draw.win_buf[WIN_HEIGHT - y - 1][x] = game->map->c_rgb;
 	}
 	y = game->draw.start - 1;
 	while (++y < game->draw.end)

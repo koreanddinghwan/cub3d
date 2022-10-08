@@ -1,15 +1,15 @@
-#include "../../inc/parser.h"
+#include "./local_parser.h"
 
-void get_img_pointer(t_map *map, int id)
+void	get_img_pointer(t_map *map, int id)
 {
 	extension_checker(map->buffer, ".xpm");
 	if (id == NO)
-		map->NO = ft_strdup(map->buffer);
+		map->no = ft_strdup(map->buffer);
 	else if (id == SO)
-		map->SO = ft_strdup(map->buffer);
+		map->so = ft_strdup(map->buffer);
 	else if (id == WE)
-		map->WE = ft_strdup(map->buffer);
+		map->we = ft_strdup(map->buffer);
 	else if (id == EA)
-		map->EA = ft_strdup(map->buffer);
+		map->ea = ft_strdup(map->buffer);
 	free(map->buffer);
 }

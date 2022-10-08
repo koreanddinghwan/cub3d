@@ -1,6 +1,6 @@
-#include "../../inc/parser.h"
+#include "./local_parser.h"
 
-int map_converter(char c)
+int	map_converter(char c)
 {
 	if (ft_isdigit(c) && (c - 48 <= 1))
 		return (c - 48);
@@ -19,11 +19,11 @@ int map_converter(char c)
 	return (FALSE);
 }
 
-void fill(t_map *map, t_dlst *node)
+void	fill(t_map *map, t_dlst *node)
 {
-	char *str;
-	int i;
-	int j;
+	char	*str;
+	int		i;
+	int		j;
 
 	str = node->content;
 	i = 0;
@@ -38,7 +38,7 @@ void fill(t_map *map, t_dlst *node)
 		}
 		while (j < map->max_map_width)
 		{
-			map->map[i][j] = BLANK; 
+			map->map[i][j] = BLANK;
 			j++;
 		}
 		i++;
@@ -46,9 +46,9 @@ void fill(t_map *map, t_dlst *node)
 	}
 }
 
-void map_alloc(t_map *map)
+void	map_alloc(t_map *map)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	map->map = ft_calloc(sizeof(int *), map->map_height);
@@ -63,11 +63,11 @@ void map_alloc(t_map *map)
 	}
 }
 
-void map_fill(t_map *map, t_dlst *start)
+void	map_fill(t_map *map, t_dlst *start)
 {
-	t_size w;
-	t_size h;
-	t_dlst *node;
+	t_size	w;
+	t_size	h;
+	t_dlst	*node;
 
 	w = 0;
 	h = 0;

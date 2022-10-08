@@ -1,8 +1,8 @@
-#include "../../inc/parser.h"
+#include "./local_parser.h"
 
-void delete_splited(char **sp)
+void	delete_splited(char **sp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (sp[i])

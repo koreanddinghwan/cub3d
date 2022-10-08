@@ -1,42 +1,14 @@
-#include "../../inc/parser.h"
+#include "./local_parser.h"
 
-/*
- *
-	
-NO ./path_to_the_north_texture
-
-SO ./path_to_the_south_texture
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
-F 220,100,0
-
-C 225,30,0
-
-1111111111111111111111111
-1000000000110000000000001
-1011000001110000000000001
-1001000000000000000000001
-111111111011000001110000000000001
-100000000011000001110111111111111
-11110111111111011100000010001
-11110111111111011101010010001
-11000000110101011100000010001
-10000000000000001100000010001
-10000000000000001101010010001
-11000001110101011111011110N0111
-11110111 1110101 101111010001
-11111111 1111111 111111111111
- * */
-
-void ignore_spaces(char **str)
+void	ignore_spaces(char **str)
 {
 	while (**str == ' ')
 		(*str)++;
 }
 
-int symbol_identifier(char *str, t_map *map)
+int	symbol_identifier(char *str, t_map *map)
 {
-	int  id;
+	int	id;
 
 	ignore_spaces(&str);
 	if (ft_strncmp(str, "NO", 2) == 0)
@@ -62,7 +34,7 @@ int symbol_identifier(char *str, t_map *map)
 	return (id);
 }
 
-void symbol_update(t_map *map, int id)
+void	symbol_update(t_map *map, int id)
 {
 	if (id == MAP)
 		return ;
@@ -75,9 +47,9 @@ void symbol_update(t_map *map, int id)
 		get_rgb(map, id);
 }
 
-void symbol_missing(t_map *map)
+void	symbol_missing(t_map *map)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 6)
@@ -87,10 +59,10 @@ void symbol_missing(t_map *map)
 	}
 }
 
-void map_make(t_map *map)
+void	map_make(t_map *map)
 {
-	int  id;
-	t_dlst *node;
+	int		id;
+	t_dlst	*node;
 
 	node = map->map_deq->pFrontNode;
 	while (1)

@@ -1,14 +1,8 @@
-#include "../../inc/parser.h"
+#include "./local_parser.h"
 
-/*
- * 1. ,와 숫자로만 이뤄져야하며
- * 2. ,의 개수는 2개.
- * 3. ,로 split하면 길이는 3이어야한다.
- * */
-
-void char_check(char *buf)
+void	char_check(char *buf)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (buf[i] && (ft_isdigit(buf[i]) || buf[i] == ','))
@@ -17,11 +11,11 @@ void char_check(char *buf)
 		error_exit("rgb error");
 }
 
-void get_rgb(t_map *map, int id)
+void	get_rgb(t_map *map, int id)
 {
-	char **sp;
-	int i;
-	int atoi;
+	char	**sp;
+	int		i;
+	int		atoi;
 
 	sp = ft_split(map->buffer, ',');
 	if (split_len(sp) != 3)
@@ -33,9 +27,9 @@ void get_rgb(t_map *map, int id)
 		if (atoi < 0 || atoi > 255)
 			error_exit("atoi error\n");
 		if (id == F)
-			map->F[i] = atoi;
+			map->f_rgb = (map->f_rgb << 8) + atoi;
 		else
-			map->C[i] = atoi;
+			map->c_rgb = (map->c_rgb << 8) + atoi;
 		i++;
 	}
 	delete_splited(sp);

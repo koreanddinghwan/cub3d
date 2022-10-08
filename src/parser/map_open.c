@@ -1,7 +1,7 @@
-#include "../../inc/parser.h"
+#include "./local_parser.h"
 
-int map_open(char *path)
+int	map_open(char *path)
 {
 	extension_checker(path, ".cub");
-	return(check_open(path));
+	return (check_open(path));
 }

@@ -1,6 +1,6 @@
-int split_len(char **sp)
+int	split_len(char **sp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (sp[i])
