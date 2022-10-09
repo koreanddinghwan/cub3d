@@ -62,7 +62,7 @@ void	dda_algorithm(t_game *game, t_dda *dda)
 			dda->mapY += dda->stepY;
 			game->draw.side = 1;
 		}
-		if (game->map->map[dda->mapX][dda->mapY] == 1)
+		if (game->map->map[dda->mapX][dda->mapY] > 0)
 			game->draw.hit = 1;
 	}
 }

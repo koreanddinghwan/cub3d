@@ -30,6 +30,7 @@ void	change_player_viewpos(t_map *map, int i, int j, int *view)
 		*view = map->map[i][j];
 		map->p_x = i;
 		map->p_y = j;
+		map->map[i][j] = 0;
 	}
 }
 
@@ -74,5 +75,7 @@ void	map_validation(t_map *map)
 			validation(map, i, j++, &view);
 		i++;
 	}
+	if (view == 0)
+		error_exit("Not Valid Map");
 	map->view = view;
 }
