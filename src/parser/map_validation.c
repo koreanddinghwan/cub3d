@@ -1,12 +1,16 @@
-#include "./local_parser.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_validation.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: myukang <myukang@student.42.kr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/09 21:03:13 by myukang           #+#    #+#             */
+/*   Updated: 2022/10/09 21:03:18 by myukang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/*
- * @validation map
- * 1. 벽은 막혀있어야한다.
- *
- * ->  map->max_map_width, height의 모든 값은 1 or BLANK여야만 한다.
- * ->  blank의 상하좌우에는 BLANK와 1이어야만한다.
- * */
+#include "./local_parser.h"
 
 int	blank_surroundings(t_map *map, int i, int j)
 {

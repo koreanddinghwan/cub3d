@@ -1,45 +1,57 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_deq_insert.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: myukang <myukang@student.42.kr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/09 21:03:44 by myukang           #+#    #+#             */
+/*   Updated: 2022/10/09 21:03:46 by myukang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_deque.h"
 
-int ft_deq_insert_rear(t_deque* pDeque, void *c)
+int	ft_deq_insert_rear(t_deque	*pDeque, void *c)
 {
-	t_dlst *element;
+	t_dlst	*element;
 
 	element = ft_dlst_new(c);
 	if (!pDeque)
 		exit(1);
 	if (ft_deq_is_empty(pDeque) == TRUE)
 	{
-		pDeque->pFrontNode = element;
-		pDeque->pRearNode = element;
+		pDeque->pfrontnode = element;
+		pDeque->prearnode = element;
 	}
 	else
 	{
-		pDeque->pRearNode->next = element;
-		element->back = pDeque->pRearNode;
-		pDeque->pRearNode = element;
+		pDeque->prearnode->next = element;
+		element->back = pDeque->prearnode;
+		pDeque->prearnode = element;
 	}
-	pDeque->currentElementCount++;
+	pDeque->currentelementcount++;
 	return (TRUE);
 }
 
-int ft_deq_insert_front(t_deque* pDeque, void *c)
+int	ft_deq_insert_front(t_deque	*pDeque, void *c)
 {
-	t_dlst *element;
+	t_dlst	*element;
 
 	element = ft_dlst_new(c);
 	if (!pDeque)
 		exit(1);
 	if (ft_deq_is_empty(pDeque) == TRUE)
 	{
-		pDeque->pFrontNode = element; 
-		pDeque->pRearNode = element;  
-	} 
+		pDeque->pfrontnode = element;
+		pDeque->prearnode = element;
+	}
 	else
 	{
-		pDeque->pFrontNode->back = element; 
-		element->next = pDeque->pFrontNode; 
-		pDeque->pFrontNode = element; 
-	} 
-	pDeque->currentElementCount++;
+		pDeque->pfrontnode->back = element;
+		element->next = pDeque->pfrontnode;
+		pDeque->pfrontnode = element;
+	}
+	pDeque->currentelementcount++;
 	return (TRUE);
 }
