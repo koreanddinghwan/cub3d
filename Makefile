@@ -17,7 +17,7 @@ SRCS = $(MAIN_SRCS) $(KEY_SRCS) $(RAYCASTING_SRCS) $(UTILS_SRCS) $(PARSER_SRCS)
 OBJS = $(SRCS:%.c=%.o)
 
 CC = cc
-# CFLAG = -Wall -Wextra -Werror
+CFLAG = -Wall -Wextra -Werror
 CFLAG = -fsanitize=address -g3
 
 RM = rm -rf

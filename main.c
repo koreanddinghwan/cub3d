@@ -51,14 +51,17 @@ void	game_init(t_game *game, char *path)
 	game->map = parser(path);
 	game->vector.p_posX = game->map->p_x;
 	game->vector.p_posY = game->map->p_y;
-	game->vector.p_dirX = -1;
+	game->vector.p_dirX = -0.5;
 	game->vector.p_dirY = 0.0;
 	game->vector.planeX = 0.0;
 	game->vector.planeY = 0.66;
 	if (game->map->view == PLAYER_N)
 		game->vector.p_dirX = -0.5;
 	else if (game->map->view == PLAYER_S)
+	{
 		game->vector.p_dirX = 0.5;
+		game->vector.planeY = -0.66;
+	}
 	else if (game->map->view == PLAYER_W)
 		rotate(game, M_PI_2);
 	else
@@ -66,6 +69,10 @@ void	game_init(t_game *game, char *path)
 	game->vector.p_Speed = 0.1;
 	game->vector.rotSpeed = 0.06;
 	game->t = 0;
+	// if (!game->map->map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
+	// 		game->vector.p_posX += game->vector.p_dirX * game->vector.p_Speed;
+	// if (!game->map->map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
+	// 		game->vector.p_posY += game->vector.p_dirY * game->vector.p_Speed;
 }
 
 int main(int ac, char *av[])

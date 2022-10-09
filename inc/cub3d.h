@@ -137,10 +137,12 @@ void    raycasting(t_game *game);
 void	dda_init(t_game *game, t_dda *dda);
 void	dda_algorithm(t_game *game, t_dda *dda);
 void	cal_camera_dir(t_game *game, t_dda *dda, int x);
+void	draw(t_game *game, int x);
 
 /*
 *	util.c
 */
 void	rotate(t_game *game, double speed);
+void	draw_dir_wall(t_game *game, int y, int x, int index);
 
 #endif
