@@ -12,9 +12,8 @@ MAIN_SRCS = main.c
 KEY_SRCS = ./src/key/key.c
 RAYCASTING_SRCS = ./src/raycasting/ray.c
 UTILS_SRCS = ./src/utils/utils.c
-BONUS_SRCS = ./src/bonus/minimap.c
 
-SRCS = $(MAIN_SRCS) $(KEY_SRCS) $(RAYCASTING_SRCS) $(UTILS_SRCS) $(BONUS_SRCS) $(PARSER_SRCS)
+SRCS = $(MAIN_SRCS) $(KEY_SRCS) $(RAYCASTING_SRCS) $(UTILS_SRCS) $(PARSER_SRCS)
 OBJS = $(SRCS:%.c=%.o)
 
 CC = cc

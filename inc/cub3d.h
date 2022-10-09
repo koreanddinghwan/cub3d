@@ -110,11 +110,6 @@ typedef struct s_minimap
 	int		mini_buf[mini_w][mini_h];
 }				t_minimap;
 
-typedef struct s_bonus
-{
-
-}				t_bonus;
-
 typedef struct s_game
 {
 	t_mlx	mlx;
