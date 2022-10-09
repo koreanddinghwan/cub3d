@@ -76,7 +76,7 @@ void	map_make(t_map *map)
 	int		id;
 	t_dlst	*node;
 
-	node = map->map_deq->pFrontNode;
+	node = map->map_deq->pfrontnode;
 	while (1)
 	{
 		id = symbol_identifier(node->content, map);
