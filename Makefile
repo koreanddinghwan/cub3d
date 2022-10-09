@@ -9,7 +9,7 @@ PARSER_SRCS = $(addprefix ./src/parser/, check_open.c extension_checker.c delete
 map_fill.c map_open.c map_reader.c map_validation.c map_make.c parser.c tools.c)
 
 MAIN_SRCS = main.c
-KEY_SRCS = ./src/key/key.c
+KEY_SRCS = ./src/key/key.c ./src/key/move.c
 RAYCASTING_SRCS = ./src/raycasting/ray.c
 UTILS_SRCS = ./src/utils/utils.c
 

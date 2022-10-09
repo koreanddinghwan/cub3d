@@ -49,26 +49,29 @@ void	wall_info_save(t_game *game)
 void	game_init(t_game *game, char *path)
 {
 	game->map = parser(path);
-	game->vector.p_posX = game->map->p_x;
-	game->vector.p_posY = game->map->p_y;
-	game->vector.p_dirX = -1;
-	game->vector.p_dirY = 0.0;
-	game->vector.planeX = 0.0;
-	game->vector.planeY = 0.66;
+	game->vector.p_posx = game->map->p_x;
+	game->vector.p_posy = game->map->p_y;
+	game->vector.p_dirx = -1;
+	game->vector.p_diry = 0.0;
+	game->vector.planex = 0.0;
+	game->vector.planey = 0.66;
 	if (game->map->view == PLAYER_N)
-		game->vector.p_dirX = -1;
+		game->vector.p_dirx = -1;
 	else if (game->map->view == PLAYER_S)
 	{
-		game->vector.p_dirX = 1;
-		game->vector.planeY = -0.66;
+		game->vector.p_dirx = 1;
+		game->vector.planey = -0.66;
 	}
 	else if (game->map->view == PLAYER_W)
 		rotate(game, M_PI_2);
 	else
 		rotate(game, -M_PI_2);
-	game->vector.p_Speed = 0.1;
-	game->vector.rotSpeed = 0.06;
-	game->t = 0;
+	game->vector.p_speed = 0.1;
+	game->vector.rotspeed = 0.06;
+	if (!game->map->map[(int)(game->vector.p_posx + game->vector.p_dirx * game->vector.p_speed)][(int)(game->vector.p_posy)])
+		game->vector.p_posx += game->vector.p_dirx * game->vector.p_speed;
+	if (!game->map->map[(int)(game->vector.p_posx)][(int)(game->vector.p_posy + game->vector.p_diry * game->vector.p_speed)])
+		game->vector.p_posy += game->vector.p_diry * game->vector.p_speed;
 }
 
 int main(int ac, char *av[])

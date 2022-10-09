@@ -1,7 +1,6 @@
 #include "cub3d.h"
 
-// press key
-int input_key(int key, t_game *game)
+int	input_key(int key, t_game *game)
 {
 	if (key == W)
 		game->key.key_w = 1;
@@ -20,7 +19,6 @@ int input_key(int key, t_game *game)
 	return (0);
 }
 
-// detach key
 int	release_key(int key, t_game *game)
 {
 	if (key == W)
@@ -40,46 +38,24 @@ int	release_key(int key, t_game *game)
 	return (0);
 }
 
-// click event
-int	click_exit()
+int	click_exit(void)
 {
 	exit(0);
 	return (0);
 }
 
-// key flag check
-void    key_check(t_game *game)
+void	key_check(t_game *game)
 {
-    if (game->key.key_w)
-	{
-		if (!game->map->map[(int)(game->vector.p_posX + game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
-			game->vector.p_posX += game->vector.p_dirX * game->vector.p_Speed;
-		if (!game->map->map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirY * game->vector.p_Speed)])
-			game->vector.p_posY += game->vector.p_dirY * game->vector.p_Speed;
-	}
+	if (game->key.key_w)
+		move_w(game);
 	if (game->key.key_s)
-	{
-		if (!game->map->map[(int)(game->vector.p_posX - game->vector.p_dirX * game->vector.p_Speed)][(int)(game->vector.p_posY)])
-			game->vector.p_posX -= game->vector.p_dirX * game->vector.p_Speed;
-		if (!game->map->map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY - game->vector.p_dirY * game->vector.p_Speed)])
-			game->vector.p_posY -= game->vector.p_dirY * game->vector.p_Speed;
-	}
+		move_s(game);
 	if (game->key.key_a)
-	{
-		if (!game->map->map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(M_PI_2) * game->vector.p_Speed - game->vector.p_dirY * sin(M_PI_2) * game->vector.p_Speed)][(int)(game->vector.p_posY)])
-			game->vector.p_posX += game->vector.p_dirX * cos(M_PI_2) * game->vector.p_Speed - game->vector.p_dirY * sin(M_PI_2) * game->vector.p_Speed;
-		if (!game->map->map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(M_PI_2) * game->vector.p_Speed + game->vector.p_dirY * cos(M_PI_2) * game->vector.p_Speed)])
-			game->vector.p_posY += game->vector.p_dirX * sin(M_PI_2) * game->vector.p_Speed + game->vector.p_dirY * cos(M_PI_2) * game->vector.p_Speed;
-	}
+		move_a(game);
 	if (game->key.key_d)
-	{
-		if (!game->map->map[(int)(game->vector.p_posX + game->vector.p_dirX * cos(-M_PI_2) * game->vector.p_Speed - game->vector.p_dirY * sin(-M_PI_2) * game->vector.p_Speed)][(int)(game->vector.p_posY)])
-			game->vector.p_posX += game->vector.p_dirX * cos(-M_PI_2) * game->vector.p_Speed - game->vector.p_dirY * sin(-M_PI_2) * game->vector.p_Speed;
-		if (!game->map->map[(int)(game->vector.p_posX)][(int)(game->vector.p_posY + game->vector.p_dirX * sin(-M_PI_2) * game->vector.p_Speed + game->vector.p_dirY * cos(-M_PI_2) * game->vector.p_Speed)])
-			game->vector.p_posY += game->vector.p_dirX * sin(-M_PI_2) * game->vector.p_Speed + game->vector.p_dirY * cos(-M_PI_2) * game->vector.p_Speed;
-	}
+		move_d(game);
 	if (game->key.key_left)
-		rotate(game, game->vector.rotSpeed);
+		rotate(game, game->vector.rotspeed);
 	if (game->key.key_right)
-		rotate(game, -game->vector.rotSpeed);
+		rotate(game, -game->vector.rotspeed);
 }

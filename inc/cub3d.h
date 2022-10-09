@@ -1,11 +1,11 @@
 #ifndef GLOBAL_H
 # define GLOBAL_H
 
-# include <fcntl.h> // open
-# include <unistd.h> // close, read, write, 
-# include <stdio.h> // printf, perror
-# include <stdlib.h> // malloc, free, exit
-# include <string.h> // strerror
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
 # include <math.h>
 # include "../minilibx_opengl_20191021/mlx.h"
 # include "libft.h"
@@ -18,15 +18,11 @@
 # define LEFT 123
 # define RIGHT 124
 # define ESC 53
-# define WIN_WIDTH 1280//640 1280 1920
-# define WIN_HEIGHT 720//480 720 1080
-# define map_Width	7
-# define map_Height	7
+# define WIN_WIDTH 1280
+# define WIN_HEIGHT 720
+# define map_Width 7
+# define map_Height 7
 # define tex_size 64
-
-# define mini_w	200
-# define mini_h 100
-
 # define ERROR "ERROR\n"
 # define GOOD_END 0
 # define BAD_END 1
@@ -47,45 +43,45 @@ typedef struct s_mlx
 
 typedef struct s_vector
 {
-	double multiple;		//카메라 평면 상에 x좌표 (-1 ~ 1)
-	double p_posX;			//플레이어의 X위치벡터
-	double p_posY;			//플레이어의 Y위치벡터
-	double p_dirX;			//플레이어의 X방향벡터
-	double p_dirY;			//플레이어의 Y방향벡터
-	double planeX;			//카메라 평면의 X벡터
-	double planeY;			//카메라 평면의 Y벡터
-	double rayDirectionX;	//광선의 X방향벡터 (방향벡터 + 카메라평면 * 배수)
-	double rayDirectionY;	//광선의 Y방향벡터
-	double p_Speed;			//플레이어의 속도
-	double rotSpeed;		//회전 속도
+	double	multiple;
+	double	p_posx;
+	double	p_posy;
+	double	p_dirx;
+	double	p_diry;			
+	double	planex;			
+	double	planey;			
+	double	raydirectionx;
+	double	raydirectiony;
+	double	p_speed;
+	double	rotspeed;
 }				t_vector;
 
 typedef struct s_dda
 {
-	double sideDistX;		//현재 위치에서 다음 X면까지의 거리
-	double sideDistY;		//현재 위치에서 다음 Y면까지의 거리
-	double deltaDistX;		//첫 번째 X면에서 그 다음 X면까지의 광선 이동거리
-	double deltaDistY;		//첫 번째 Y면에서 그 다음 Y면까지의 광선 이동거리
-	double perpWallDist;	//광선의 이동거리계산 변수
-	int mapX;				
-	int mapY;				
-	int stepX;				//광선의 방향에 따라 결정 (-1 ~ 1)
-	int stepY;				//광선의 방향에 따라 결정 (-1 ~ 1)
+	double	sidedistx;
+	double	sidedisty;
+	double	deltadistx;
+	double	deltadisty;
+	double	perpwalldist;
+	int		mapx;				
+	int		mapy;				
+	int		stepx;
+	int		stepy;
 }				t_dda;
 
 typedef struct s_draw
 {
-	int		draw_height;	//벽의 높이
-	int		start;			//그릴 시작점
-	int		end;			//그릴 마지막점
-	int 	hit;			//벽과 부딪혔는지 판별 (0->X, 1->O)
-	int 	side;			//0->X면, 1->Y면
-	int		texX;			//텍스쳐의 X좌표
-	int		texY;			//텍스쳐의 Y좌표
-	double	texPos;			//시작 텍스쳐 좌표
-	double	step;			//픽셀당 텍스쳐 좌표 증가크기
-	double	wallX;			//광선이 부딪힌 벽의 좌표
-	int		win_buf[WIN_HEIGHT][WIN_WIDTH]; //픽셀의 화면 버퍼
+	int		draw_height;
+	int		start;
+	int		end;
+	int		hit;
+	int		side;
+	int		texx;
+	int		texy;
+	double	texpos;
+	double	step;
+	double	wallx;
+	int		win_buf[WIN_HEIGHT][WIN_WIDTH];
 }				t_draw;
 
 typedef struct s_key
@@ -100,27 +96,34 @@ typedef struct s_key
 
 typedef struct s_game
 {
-	t_mlx	mlx;
-	t_vector vector;
-	t_draw	draw;
-	t_key	key;
-	t_map	*map;
-	unsigned long long t;
-	int		**wall;
+	t_mlx		mlx;
+	t_vector	vector;
+	t_draw		draw;
+	t_key		key;
+	t_map		*map;
+	int			**wall;
 }				t_game;
 
 /*
  *	key.c
  */
-int input_key(int key, t_game *game);
-int	release_key(int key, t_game *game);
-int	click_exit(void);
+int		input_key(int key, t_game *game);
+int		release_key(int key, t_game *game);
+int		click_exit(void);
 void	key_check(t_game *game);
+
+/*
+ *	move.c
+ */
+void	move_w(t_game *game);
+void	move_s(t_game *game);
+void	move_a(t_game *game);
+void	move_d(t_game *game);
 
 /*
  *	ray.c
  */
-void    raycasting(t_game *game);
+void	raycasting(t_game *game);
 void	dda_init(t_game *game, t_dda *dda);
 void	dda_algorithm(t_game *game, t_dda *dda);
 void	cal_camera_dir(t_game *game, t_dda *dda, int x);
@@ -131,5 +134,8 @@ void	draw(t_game *game, int x);
  */
 void	rotate(t_game *game, double speed);
 void	draw_dir_wall(t_game *game, int y, int x, int index);
+void	f_c_draw(t_game *game, int x);
+void	cal_tex(t_game *game);
+void	all_free(t_game *game);
 
 #endif

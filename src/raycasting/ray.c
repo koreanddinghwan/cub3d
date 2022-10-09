@@ -1,20 +1,22 @@
 #include "cub3d.h"
 
-void    raycasting(t_game *game)
+void	raycasting(t_game *game)
 {
-	t_dda dda;
-	int x;
+	t_dda	dda;
+	int		x;
 
 	x = -1;
 	while (++x < WIN_WIDTH)
 	{
 		game->vector.multiple = (2 * x / (double)(WIN_WIDTH)) - 1;
-		game->vector.rayDirectionX = game->vector.p_dirX + game->vector.planeX * game->vector.multiple;
-		game->vector.rayDirectionY = game->vector.p_dirY + game->vector.planeY * game->vector.multiple;
-		dda.mapX = (int)(game->vector.p_posX);
-		dda.mapY = (int)(game->vector.p_posY);
-		dda.deltaDistX = fabs(1 / game->vector.rayDirectionX);
-		dda.deltaDistY = fabs(1 / game->vector.rayDirectionY);
+		game->vector.raydirectionx = game->vector.p_dirx + game->vector.planex \
+										* game->vector.multiple;
+		game->vector.raydirectiony = game->vector.p_diry + game->vector.planey \
+										* game->vector.multiple;
+		dda.mapx = (int)(game->vector.p_posx);
+		dda.mapy = (int)(game->vector.p_posy);
+		dda.deltadistx = fabs(1 / game->vector.raydirectionx);
+		dda.deltadisty = fabs(1 / game->vector.raydirectiony);
 		game->draw.hit = 0;
 		dda_init(game, &dda);
 		cal_camera_dir(game, &dda, x);
@@ -23,25 +25,27 @@ void    raycasting(t_game *game)
 
 void	dda_init(t_game *game, t_dda *dda)
 {
-	if (game->vector.rayDirectionX < 0)
+	if (game->vector.raydirectionx < 0)
 	{
-		dda->stepX = -1;
-		dda->sideDistX = (game->vector.p_posX - dda->mapX) * dda->deltaDistX;
+		dda->stepx = -1;
+		dda->sidedistx = (game->vector.p_posx - dda->mapx) * dda->deltadistx;
 	}
 	else
 	{
-		dda->stepX = 1;
-		dda->sideDistX = (dda->mapX + 1.0 - game->vector.p_posX) * dda->deltaDistX;
+		dda->stepx = 1;
+		dda->sidedistx = (dda->mapx + 1.0 - game->vector.p_posx) * \
+							dda->deltadistx;
 	}
-	if (game->vector.rayDirectionY < 0)
+	if (game->vector.raydirectiony < 0)
 	{
-		dda->stepY = -1;
-		dda->sideDistY = (game->vector.p_posY - dda->mapY) * dda->deltaDistY;
+		dda->stepy = -1;
+		dda->sidedisty = (game->vector.p_posy - dda->mapy) * dda->deltadisty;
 	}
 	else
 	{
-		dda->stepY = 1;
-		dda->sideDistY = (dda->mapY + 1.0 - game->vector.p_posY) * dda->deltaDistY;
+		dda->stepy = 1;
+		dda->sidedisty = (dda->mapy + 1.0 - game->vector.p_posy) * \
+							dda->deltadisty;
 	}
 	dda_algorithm(game, dda);
 }
@@ -50,19 +54,19 @@ void	dda_algorithm(t_game *game, t_dda *dda)
 {
 	while (game->draw.hit == 0)
 	{
-		if (dda->sideDistX < dda->sideDistY)
+		if (dda->sidedistx < dda->sidedisty)
 		{
-			dda->sideDistX += dda->deltaDistX;
-			dda->mapX += dda->stepX;
+			dda->sidedistx += dda->deltadistx;
+			dda->mapx += dda->stepx;
 			game->draw.side = 0;
 		}
 		else
 		{
-			dda->sideDistY += dda->deltaDistY;
-			dda->mapY += dda->stepY;
+			dda->sidedisty += dda->deltadisty;
+			dda->mapy += dda->stepy;
 			game->draw.side = 1;
 		}
-		if (game->map->map[dda->mapX][dda->mapY] > 0)
+		if (game->map->map[dda->mapx][dda->mapy] > 0)
 			game->draw.hit = 1;
 	}
 }
@@ -70,53 +74,50 @@ void	dda_algorithm(t_game *game, t_dda *dda)
 void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 {
 	if (game->draw.side == 0)
-		dda->perpWallDist = (dda->mapX - game->vector.p_posX + (1 - dda->stepX) / 2) / game->vector.rayDirectionX;
+		dda->perpwalldist = (dda->mapx - game->vector.p_posx + \
+					(1 - dda->stepx) / 2) / game->vector.raydirectionx;
 	else
-		dda->perpWallDist = (dda->mapY - game->vector.p_posY + (1 - dda->stepY) / 2) / game->vector.rayDirectionY;
-	game->draw.draw_height = (int)(WIN_HEIGHT/ dda->perpWallDist);
+		dda->perpwalldist = (dda->mapy - game->vector.p_posy + \
+					(1 - dda->stepy) / 2) / game->vector.raydirectiony;
+	game->draw.draw_height = (int)(WIN_HEIGHT / dda->perpwalldist);
 	game->draw.start = (-game->draw.draw_height / 2) + (WIN_HEIGHT / 2);
 	if (game->draw.start < 0)
 		game->draw.start = 0;
 	game->draw.end = (game->draw.draw_height / 2) + (WIN_HEIGHT / 2);
 	if (game->draw.end >= WIN_HEIGHT)
 		game->draw.end = WIN_HEIGHT - 1;
-
 	if (game->draw.side == 0)
-		game->draw.wallX = game->vector.p_posY + dda->perpWallDist * game->vector.rayDirectionY;
+		game->draw.wallx = game->vector.p_posy + dda->perpwalldist * \
+							game->vector.raydirectiony;
 	else
-		game->draw.wallX = game->vector.p_posX + dda->perpWallDist * game->vector.rayDirectionX;
-	game->draw.wallX = game->draw.wallX - (int)game->draw.wallX;
-	game->draw.texX = (int)(game->draw.wallX * (double)tex_size);
-
-	if (game->draw.side == 0 && game->vector.rayDirectionX > 0)
-		game->draw.texX = tex_size - game->draw.texX - 1;
-	if (game->draw.side == 1 && game->vector.rayDirectionY < 0)
-		game->draw.texX = tex_size - game->draw.texX - 1;
-	game->draw.step = 1.0 * tex_size / game->draw.draw_height;
-	game->draw.texPos = (game->draw.start - WIN_HEIGHT / 2 + game->draw.draw_height / 2) * game->draw.step;
+		game->draw.wallx = game->vector.p_posx + dda->perpwalldist * \
+							game->vector.raydirectionx;
+	game->draw.wallx = game->draw.wallx - (int)game->draw.wallx;
+	cal_tex(game);
 	draw(game, x);
 }
 
 void	draw(t_game *game, int x)
 {
-	int y = -1;
+	int	y;
 
-	while (++y < WIN_HEIGHT)
-	{
-		game->draw.win_buf[y][x] = game->map->f_rgb;
-		game->draw.win_buf[WIN_HEIGHT - y - 1][x] = game->map->c_rgb;
-	}
+	f_c_draw(game, x);
 	y = game->draw.start - 1;
 	while (++y < game->draw.end)
 	{
 		if (game->draw.side == 0)
 		{
-			if ((game->vector.rayDirectionY <= 0 && game->vector.rayDirectionX <= 0) || (game->vector.rayDirectionY > 0) && game->vector.rayDirectionX <= 0)
+			if ((game->vector.raydirectiony <= 0 && game->vector.raydirectionx \
+							<= 0) || (game->vector.raydirectiony > 0) && \
+						game->vector.raydirectionx <= 0)
 				draw_dir_wall(game, y, x, 0);
 			else
 				draw_dir_wall(game, y, x, 1);
 		}
-		else if (game->draw.side == 1 && ((game->vector.rayDirectionY <= 0 && game->vector.rayDirectionX <= 0) || (game->vector.rayDirectionY <= 0) && game->vector.rayDirectionX > 0))
+		else if (game->draw.side == 1 && ((game->vector.raydirectiony <= 0 && \
+							game->vector.raydirectionx <= 0) || \
+						(game->vector.raydirectiony <= 0) && \
+							game->vector.raydirectionx > 0))
 			draw_dir_wall(game, y, x, 2);
 		else
 			draw_dir_wall(game, y, x, 3);
