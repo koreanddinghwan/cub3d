@@ -1,15 +1,5 @@
-#ifndef GLOBAL_H
-# define GLOBAL_H
-
-# include <fcntl.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <math.h>
-# include "../minilibx_opengl_20191021/mlx.h"
-# include "libft.h"
-# include "./parser.h"
+#ifndef CUB3D_H
+# define CUB3D_H
 
 # define W 13
 # define A 0
@@ -20,12 +10,20 @@
 # define ESC 53
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
-# define map_Width 7
-# define map_Height 7
-# define tex_size 64
+# define TEX_SIZE 64
 # define ERROR "ERROR\n"
 # define GOOD_END 0
 # define BAD_END 1
+
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <math.h>
+# include "../minilibx_opengl_20191021/mlx.h"
+# include "libft.h"
+# include "./parser.h"
 
 typedef struct s_mlx
 {
@@ -137,5 +135,17 @@ void	draw_dir_wall(t_game *game, int y, int x, int index);
 void	f_c_draw(t_game *game, int x);
 void	cal_tex(t_game *game);
 void	all_free(t_game *game);
+/*
+ *	util_2.c
+ */
+int		err_end(void);
+void	game_init(t_game *game, char *av[]);
+void	mlx_f(t_game *game);
+void	game_vec_init(t_game *game, char *path);
+
+/*
+ *	main.c
+ */
+int	game_loop(t_game *game);
 
 #endif

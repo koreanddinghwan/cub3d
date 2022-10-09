@@ -7,6 +7,8 @@
         "concepts": "c",
         "functional": "c",
         "iterator": "c",
-        "*.tcc": "c"
+        "*.tcc": "c",
+        "stdlib.h": "c",
+        "ostream": "c"
     }
 }

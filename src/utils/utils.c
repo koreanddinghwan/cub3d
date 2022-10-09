@@ -19,9 +19,9 @@ void	rotate(t_game *game, double speed)
 
 void	draw_dir_wall(t_game *game, int y, int x, int index)
 {
-	game->draw.texy = (int)game->draw.texpos & (tex_size - 1);
+	game->draw.texy = (int)game->draw.texpos & (TEX_SIZE - 1);
 	game->draw.texpos += game->draw.step;
-	game->draw.win_buf[y][x] = game->wall[index][tex_size * \
+	game->draw.win_buf[y][x] = game->wall[index][TEX_SIZE * \
 								game->draw.texy + game->draw.texx];
 }
 
@@ -39,12 +39,12 @@ void	f_c_draw(t_game *game, int x)
 
 void	cal_tex(t_game *game)
 {
-	game->draw.texx = (int)(game->draw.wallx * (double)tex_size);
+	game->draw.texx = (int)(game->draw.wallx * (double)TEX_SIZE);
 	if (game->draw.side == 0 && game->vector.raydirectionx > 0)
-		game->draw.texx = tex_size - game->draw.texx - 1;
+		game->draw.texx = TEX_SIZE - game->draw.texx - 1;
 	if (game->draw.side == 1 && game->vector.raydirectiony < 0)
-		game->draw.texx = tex_size - game->draw.texx - 1;
-	game->draw.step = 1.0 * tex_size / game->draw.draw_height;
+		game->draw.texx = TEX_SIZE - game->draw.texx - 1;
+	game->draw.step = 1.0 * TEX_SIZE / game->draw.draw_height;
 	game->draw.texpos = (game->draw.start - WIN_HEIGHT / 2 + \
 				game->draw.draw_height / 2) * game->draw.step;
 }

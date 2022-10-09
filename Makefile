@@ -11,7 +11,7 @@ map_fill.c map_open.c map_reader.c map_validation.c map_make.c parser.c tools.c)
 MAIN_SRCS = main.c
 KEY_SRCS = ./src/key/key.c ./src/key/move.c
 RAYCASTING_SRCS = ./src/raycasting/ray.c
-UTILS_SRCS = ./src/utils/utils.c
+UTILS_SRCS = ./src/utils/utils.c ./src/utils/utils_2.c
 
 SRCS = $(MAIN_SRCS) $(KEY_SRCS) $(RAYCASTING_SRCS) $(UTILS_SRCS) $(PARSER_SRCS)
 OBJS = $(SRCS:%.c=%.o)

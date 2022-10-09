@@ -2,8 +2,8 @@
 
 int	game_loop(t_game *game)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	key_check(game);
 	raycasting(game);
@@ -11,20 +11,23 @@ int	game_loop(t_game *game)
 	while (++y < WIN_HEIGHT)
 	{
 		x = -1;
-		while(++x < WIN_WIDTH)
-			game->mlx.addr[y * WIN_WIDTH + x] = game->draw.win_buf[y][x]; //픽셀의 화면 버퍼
+		while (++x < WIN_WIDTH)
+			game->mlx.addr[y * WIN_WIDTH + x] = game->draw.win_buf[y][x];
 	}
-	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.img, 0, 0);
-	return 0;
+	return (mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, \
+			game->mlx.img, 0, 0));
 }
 
 void	images_per_save(t_game *game, char *file_name, int index)
 {
-	t_mlx img;
-	int y, x;
+	t_mlx	img;
+	int		y;
+	int		x;
 
-	img.img_test[index] = mlx_xpm_file_to_image(game->mlx.ptr, file_name, &img.w, &img.h);
-	img.addr = (int *)mlx_get_data_addr(img.img_test[index], &img.pixel, &img.size, &img.endian);
+	img.img_test[index] = mlx_xpm_file_to_image(game->mlx.ptr, file_name, \
+		&img.w, &img.h);
+	img.addr = (int *)mlx_get_data_addr(img.img_test[index], &img.pixel, \
+		&img.size, &img.endian);
 	y = -1;
 	while (++y < img.h)
 	{
@@ -32,21 +35,21 @@ void	images_per_save(t_game *game, char *file_name, int index)
 		while (++x < img.w)
 			game->wall[index][x + img.w * y] = img.addr[x + img.w * y];
 	}
-	// mlx_destroy_image(game->mlx.ptr, img.img_test[index]);
+	mlx_destroy_image(game->mlx.ptr, img.img_test[index]);
 }
 
 void	wall_info_save(t_game *game)
 {
-	int		x;
-	int 	y;
+	int	x;
+	int	y;
 
-	images_per_save(game, game->map->no, 0); // N
-	images_per_save(game, game->map->so, 1); // S
-	images_per_save(game, game->map->we, 2); // W
-	images_per_save(game, game->map->ea, 3); // E
+	images_per_save(game, game->map->no, 0);
+	images_per_save(game, game->map->so, 1);
+	images_per_save(game, game->map->we, 2);
+	images_per_save(game, game->map->ea, 3);
 }
 
-void	game_init(t_game *game, char *path)
+void	game_vec_init(t_game *game, char *path)
 {
 	game->map = parser(path);
 	game->vector.p_posx = game->map->p_x;
@@ -68,46 +71,30 @@ void	game_init(t_game *game, char *path)
 		rotate(game, -M_PI_2);
 	game->vector.p_speed = 0.1;
 	game->vector.rotspeed = 0.06;
-	if (!game->map->map[(int)(game->vector.p_posx + game->vector.p_dirx * game->vector.p_speed)][(int)(game->vector.p_posy)])
-		game->vector.p_posx += game->vector.p_dirx * game->vector.p_speed;
-	if (!game->map->map[(int)(game->vector.p_posx)][(int)(game->vector.p_posy + game->vector.p_diry * game->vector.p_speed)])
-		game->vector.p_posy += game->vector.p_diry * game->vector.p_speed;
+	move_w(game);
 }
 
-int main(int ac, char *av[])
+int	main(int ac, char *av[])
 {
 	t_game	*game;
+	int		i;
 
 	if (ac != 2)
-	{
-		write(1, ERROR, ft_strlen(ERROR));
-		return BAD_END;
-	}
-	if (!(game = malloc(sizeof(t_game))))
-	{
-		write(1, ERROR, ft_strlen(ERROR));
-		return BAD_END;
-	}
+		return (err_end());
+	game = malloc(sizeof(t_game));
+	if (!game)
+		return (err_end());
 	game->wall = (int **)malloc(sizeof(int *) * 4);
-	for (int i = 0; i < 4; i++)
+	i = -1;
+	while (++i < 4)
 	{
-		if (!(game->wall[i] = (int *)malloc(sizeof(int) * tex_size * tex_size)))
-		{
-			write(1, ERROR, ft_strlen(ERROR));
-			return BAD_END;
-		}
+		game->wall[i] = (int *)malloc(sizeof(int) * TEX_SIZE * TEX_SIZE);
+		if (!(game->wall[i]))
+			return (err_end());
 	}
-	game->mlx.ptr = mlx_init();
-	game->mlx.win = mlx_new_window(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT, "cub3D");
-	game->mlx.img = mlx_new_image(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT);
-	game->mlx.addr = (int *)mlx_get_data_addr(game->mlx.img, &game->mlx.pixel, &game->mlx.size, &game->mlx.endian);
-	game_init(game, av[1]);
+	game_init(game, av);
 	wall_info_save(game);
-	mlx_hook(game->mlx.win, 2, 1, &input_key, game);
-	mlx_hook(game->mlx.win, 3, 2, &release_key, game);
-	mlx_hook(game->mlx.win, 17, 0, &click_exit, game);
-	mlx_loop_hook(game->mlx.ptr , &game_loop, game);
-	mlx_loop(game->mlx.ptr);
-	// all_free(game);
-	return GOOD_END;
+	mlx_f(game);
+	all_free(game);
+	return (GOOD_END);
 }
