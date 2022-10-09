@@ -1,7 +1,19 @@
-#ifndef FT_DEQUE_H
-#define FT_DEQUE_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_deque.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: myukang <myukang@student.42.kr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/09 21:03:56 by myukang           #+#    #+#             */
+/*   Updated: 2022/10/09 21:03:57 by myukang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "libft.h"
+#ifndef FT_DEQUE_H
+# define FT_DEQUE_H
+
+# include "libft.h"
 
 /*
  * implemented using ft_dlst interface

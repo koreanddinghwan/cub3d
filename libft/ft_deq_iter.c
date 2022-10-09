@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_deq_iter.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: myukang <myukang@student.42.kr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/09 21:03:49 by myukang           #+#    #+#             */
+/*   Updated: 2022/10/09 21:03:50 by myukang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 void	ft_deq_front_iter(t_deque *deq, void (*f)(void*))
@@ -8,7 +20,7 @@ void	ft_deq_front_iter(t_deque *deq, void (*f)(void*))
 		return ;
 	if (!f)
 		return ;
-	cur = deq->pFrontNode;
+	cur = deq->pfrontnode;
 	while (cur)
 	{
 		f(cur->content);
@@ -24,7 +36,7 @@ void	ft_deq_rear_iter(t_deque *deq, void (*f)(void*))
 		return ;
 	if (!f)
 		return ;
-	cur = deq->pRearNode;
+	cur = deq->prearnode;
 	while (cur)
 	{
 		f(cur->content);

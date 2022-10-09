@@ -1,39 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_deq_pop.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: myukang <myukang@student.42.kr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/09 21:03:55 by myukang           #+#    #+#             */
+/*   Updated: 2022/10/09 21:03:56 by myukang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_deque.h"
 
-t_dlst* ft_deq_pop_front(t_deque* pDeque)
+t_dlst	*ft_deq_pop_front(t_deque *pDeque)
 {
-	t_dlst *rtn;
+	t_dlst	*rtn;
 
 	if (!pDeque)
 		exit(1);
-	if (pDeque->currentElementCount == 0)
+	if (pDeque->currentelementcount == 0)
 		return (NULL);
-	rtn  = pDeque->pFrontNode;
-	pDeque->pFrontNode = pDeque->pFrontNode->next;
-	if (pDeque->pFrontNode)
-		pDeque->pFrontNode->back = NULL;
-	if (pDeque->currentElementCount == 1)
-		pDeque->pRearNode = NULL;
+	rtn = pDeque->pfrontnode;
+	pDeque->pfrontnode = pDeque->pfrontnode->next;
+	if (pDeque->pfrontnode)
+		pDeque->pfrontnode->back = NULL;
+	if (pDeque->currentelementcount == 1)
+		pDeque->prearnode = NULL;
 	rtn->next = NULL;
-	pDeque->currentElementCount--;
+	pDeque->currentelementcount--;
 	return (rtn);
 }
 
-t_dlst* ft_deq_pop_rear(t_deque* pDeque)
+t_dlst	*ft_deq_pop_rear(t_deque *pDeque)
 {
-	t_dlst *rtn;
+	t_dlst	*rtn;
 
 	if (!pDeque)
 		exit(1);
-	if (pDeque->currentElementCount == 0)
+	if (pDeque->currentelementcount == 0)
 		return (NULL);
-	rtn  = pDeque->pRearNode;
-	pDeque->pRearNode = pDeque->pRearNode->back;
-	if (pDeque->pRearNode)
-		pDeque->pRearNode->next = NULL;
-	if (pDeque->currentElementCount == 1)
-		pDeque->pFrontNode = NULL;
+	rtn = pDeque->prearnode;
+	pDeque->prearnode = pDeque->prearnode->back;
+	if (pDeque->prearnode)
+		pDeque->prearnode->next = NULL;
+	if (pDeque->currentelementcount == 1)
+		pDeque->pfrontnode = NULL;
 	rtn->back = NULL;
-	pDeque->currentElementCount--;
+	pDeque->currentelementcount--;
 	return (rtn);
 }
