@@ -98,18 +98,6 @@ typedef struct s_key
 	int		key_right;
 }				t_key;
 
-typedef struct s_minimap
-{
-	int		*mini_addr;
-	void	*mini_img;
-	int		pixel;
-	int		size;
-	int		endian;
-	int		ratio_w;
-	int		ratio_h;
-	int		mini_buf[mini_w][mini_h];
-}				t_minimap;
-
 typedef struct s_game
 {
 	t_mlx	mlx;
@@ -117,22 +105,21 @@ typedef struct s_game
 	t_draw	draw;
 	t_key	key;
 	t_map	*map;
-	t_minimap mini;
 	unsigned long long t;
 	int		**wall;
 }				t_game;
 
 /*
-*	key.c
-*/
+ *	key.c
+ */
 int input_key(int key, t_game *game);
 int	release_key(int key, t_game *game);
 int	click_exit(void);
 void	key_check(t_game *game);
 
 /*
-*	ray.c
-*/
+ *	ray.c
+ */
 void    raycasting(t_game *game);
 void	dda_init(t_game *game, t_dda *dda);
 void	dda_algorithm(t_game *game, t_dda *dda);
@@ -140,8 +127,8 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x);
 void	draw(t_game *game, int x);
 
 /*
-*	util.c
-*/
+ *	util.c
+ */
 void	rotate(t_game *game, double speed);
 void	draw_dir_wall(t_game *game, int y, int x, int index);
 
