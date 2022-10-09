@@ -15,7 +15,6 @@ int	game_loop(t_game *game)
 			game->mlx.addr[y * WIN_WIDTH + x] = game->draw.win_buf[y][x]; //픽셀의 화면 버퍼
 	}
 	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.img, 0, 0);
-	print_minimap(game);
 	return 0;
 }
 
@@ -52,7 +51,7 @@ void	game_init(t_game *game, char *path)
 	game->map = parser(path);
 	game->vector.p_posX = game->map->p_x;
 	game->vector.p_posY = game->map->p_y;
-	game->vector.p_dirX = -0.5;
+	game->vector.p_dirX = -1;
 	game->vector.p_dirY = 0.0;
 	game->vector.planeX = 0.0;
 	game->vector.planeY = 0.66;
@@ -91,7 +90,6 @@ int main(int ac, char *av[])
 			write(1, ERROR, ft_strlen(ERROR));
 			return BAD_END;
 		}
-
 	}
 	game->mlx.ptr = mlx_init();
 	game->mlx.win = mlx_new_window(game->mlx.ptr, WIN_WIDTH, WIN_HEIGHT, "cub3D");

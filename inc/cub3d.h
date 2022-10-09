@@ -47,7 +47,7 @@ typedef struct s_mlx
 
 typedef struct s_vector
 {
-	double cameraX;			//카메라 평면 상에 x좌표 (-1 ~ 1)
+	double multiple;		//카메라 평면 상에 x좌표 (-1 ~ 1)
 	double p_posX;			//플레이어의 X위치벡터
 	double p_posY;			//플레이어의 Y위치벡터
 	double p_dirX;			//플레이어의 X방향벡터
@@ -67,8 +67,8 @@ typedef struct s_dda
 	double deltaDistX;		//첫 번째 X면에서 그 다음 X면까지의 광선 이동거리
 	double deltaDistY;		//첫 번째 Y면에서 그 다음 Y면까지의 광선 이동거리
 	double perpWallDist;	//광선의 이동거리계산 변수
-	int mapX;				//좌표상 플레이어의 X위치
-	int mapY;				//좌표상 플레이어의 Y위치
+	int mapX;				
+	int mapY;				
 	int stepX;				//광선의 방향에 따라 결정 (-1 ~ 1)
 	int stepY;				//광선의 방향에 따라 결정 (-1 ~ 1)
 }				t_dda;
@@ -142,7 +142,5 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x);
 *	util.c
 */
 void	rotate(t_game *game, double speed);
-
-void	print_minimap(t_game *game);
 
 #endif

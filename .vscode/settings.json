@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "__bit_reference": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "cub3d.h": "c",
+        "iosfwd": "c"
     }
 }

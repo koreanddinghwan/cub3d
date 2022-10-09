@@ -8,13 +8,13 @@ void    raycasting(t_game *game)
 	x = -1;
 	while (++x < WIN_WIDTH)
 	{
-		game->vector.cameraX = (2 * x / (double)(WIN_WIDTH)) - 1;
-		game->vector.rayDirectionX = game->vector.p_dirX + game->vector.planeX * game->vector.cameraX;
-		game->vector.rayDirectionY = game->vector.p_dirY + game->vector.planeY * game->vector.cameraX;
+		game->vector.multiple = (2 * x / (double)(WIN_WIDTH)) - 1;
+		game->vector.rayDirectionX = game->vector.p_dirX + game->vector.planeX * game->vector.multiple;
+		game->vector.rayDirectionY = game->vector.p_dirY + game->vector.planeY * game->vector.multiple;
 		dda.mapX = (int)(game->vector.p_posX);
 		dda.mapY = (int)(game->vector.p_posY);
-		dda.deltaDistX = fabs(EOF / game->vector.rayDirectionX);
-		dda.deltaDistY = fabs(EOF / game->vector.rayDirectionY);
+		dda.deltaDistX = fabs(1 / game->vector.rayDirectionX);
+		dda.deltaDistY = fabs(1 / game->vector.rayDirectionY);
 		game->draw.hit = 0;
 		dda_init(game, &dda);
 		cal_camera_dir(game, &dda, x);
@@ -69,9 +69,9 @@ void	dda_algorithm(t_game *game, t_dda *dda)
 
 void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 {
-	if (game->draw.side == 0)	// 부딪힌 광선이 x면이면 x방향으로 몇칸지나갔는지 계산
+	if (game->draw.side == 0)
 		dda->perpWallDist = (dda->mapX - game->vector.p_posX + (1 - dda->stepX) / 2) / game->vector.rayDirectionX;
-	else	// 부딪힌 광선이 y면
+	else
 		dda->perpWallDist = (dda->mapY - game->vector.p_posY + (1 - dda->stepY) / 2) / game->vector.rayDirectionY;
 	game->draw.draw_height = (int)(WIN_HEIGHT/ dda->perpWallDist);
 	game->draw.start = (-game->draw.draw_height / 2) + (WIN_HEIGHT / 2);
@@ -80,6 +80,7 @@ void	cal_camera_dir(t_game *game, t_dda *dda, int x)
 	game->draw.end = (game->draw.draw_height / 2) + (WIN_HEIGHT / 2);
 	if (game->draw.end >= WIN_HEIGHT)
 		game->draw.end = WIN_HEIGHT - 1;
+
 	if (game->draw.side == 0)
 		game->draw.wallX = game->vector.p_posY + dda->perpWallDist * game->vector.rayDirectionY;
 	else
