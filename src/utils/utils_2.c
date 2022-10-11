@@ -6,15 +6,15 @@
 /*   By: gyumpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 13:19:37 by gyumpark          #+#    #+#             */
-/*   Updated: 2022/10/11 13:19:38 by gyumpark         ###   ########.fr       */
+/*   Updated: 2022/10/11 13:21:12 by gyumpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int err_end(void)
+int	err_end(void)
 {
-    write(1, ERROR, ft_strlen(ERROR));
+	write(1, ERROR, ft_strlen(ERROR));
 	return (BAD_END);
 }
 
