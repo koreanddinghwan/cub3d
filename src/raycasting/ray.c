@@ -6,7 +6,7 @@
 /*   By: gyumpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 13:19:26 by gyumpark          #+#    #+#             */
-/*   Updated: 2022/10/11 13:19:26 by gyumpark         ###   ########.fr       */
+/*   Updated: 2022/10/11 13:30:18 by gyumpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,16 +120,16 @@ void	draw(t_game *game, int x)
 		if (game->draw.side == 0)
 		{
 			if ((game->vector.raydirectiony <= 0 && game->vector.raydirectionx \
-							<= 0) || (game->vector.raydirectiony > 0) && \
-						game->vector.raydirectionx <= 0)
+						<= 0) || ((game->vector.raydirectiony > 0) \
+					&& game->vector.raydirectionx <= 0))
 				draw_dir_wall(game, y, x, 0);
 			else
 				draw_dir_wall(game, y, x, 1);
 		}
 		else if (game->draw.side == 1 && ((game->vector.raydirectiony <= 0 && \
 							game->vector.raydirectionx <= 0) || \
-						(game->vector.raydirectiony <= 0) && \
-							game->vector.raydirectionx > 0))
+						((game->vector.raydirectiony <= 0) && \
+							game->vector.raydirectionx > 0)))
 			draw_dir_wall(game, y, x, 2);
 		else
 			draw_dir_wall(game, y, x, 3);

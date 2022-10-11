@@ -18,7 +18,7 @@ OBJS = $(SRCS:%.c=%.o)
 
 CC = cc
 CFLAG = -Wall -Wextra -Werror
-CFLAG = -fsanitize=address -g3
+\CFLAG = -fsanitize=address -g3
 
 RM = rm -rf
 

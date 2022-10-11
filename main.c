@@ -6,7 +6,7 @@
 /*   By: gyumpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 13:18:49 by gyumpark          #+#    #+#             */
-/*   Updated: 2022/10/11 13:18:49 by gyumpark         ###   ########.fr       */
+/*   Updated: 2022/10/11 13:24:08 by gyumpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,6 @@ void	images_per_save(t_game *game, char *file_name, int index)
 
 void	wall_info_save(t_game *game)
 {
-	int	x;
-	int	y;
-
 	images_per_save(game, game->map->no, 0);
 	images_per_save(game, game->map->so, 1);
 	images_per_save(game, game->map->we, 2);
