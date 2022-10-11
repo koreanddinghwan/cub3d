@@ -23,7 +23,7 @@
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 # define TEX_SIZE 64
-# define ERROR "ERROR\n"
+# define ERROR "Error\n"
 # define GOOD_END 0
 # define BAD_END 1
 
